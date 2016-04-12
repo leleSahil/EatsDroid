@@ -9,5 +9,23 @@
         <!--android:layout_height="match_parent"-->
         <!--android:id="@+id/mealListView" >-->
     <!--</ListView>-->
+    <FrameLayout
+        android:id="@+id/Meal1Container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:orientation="vertical" />
+    <LinearLayout
+        android:id="@+id/Meal2Container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:orientation="vertical" />
+    <LinearLayout
+        android:id="@+id/Meal3Container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:orientation="vertical" />
 
 </LinearLayout>

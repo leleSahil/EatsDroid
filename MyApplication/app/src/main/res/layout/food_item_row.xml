@@ -21,16 +21,33 @@
             android:layout_gravity="center_vertical"
             />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
+        android:orientation="horizontal"
         >
         <ImageView
             android:layout_width="18sp"
             android:layout_height="18sp"
             android:id="@+id/dietary_identifier"
+            android:layout_gravity="center_vertical"
             />
+        <!--<ImageButton android:id="@+id/favorite"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:src="@drawable/star"-->
+            <!--android:background="#00ffffff"/>-->
+            <!--android:onClick="onToggleStar"-->
+        <!--<CheckBox-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="New Checkbox"-->
+            <!--android:id="@+id/checkbox"-->
+            <!--android:layout_gravity="center_vertical" />-->
+            <!--android:onClick="onToggleStar"-->
+
     </LinearLayout>
 </LinearLayout>

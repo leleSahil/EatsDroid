@@ -53,7 +53,14 @@ public class RestaurantFragment extends Fragment {
 
         // get the meals for the day (breakfast, lunch, dinner)
         ArrayList<Meal> mealsOfDay = dateSelectedMenu.getMeals();
+
         for(int i=0; i < mealsOfDay.size(); i++) {
+            // for each Meal - make one header add it to a vector of custom parent type
+            // for each section - make a add it to a vector of custom parent type
+
+
+
+
             // make a MealFragment for each Meal and add it to the view for the RestaurantFragment
             MealFragment mealFragment = new MealFragment();
             // pass whatever data to the mealFragment that you need to through the arguments
@@ -64,8 +71,19 @@ public class RestaurantFragment extends Fragment {
 
             FragmentManager fm = getChildFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
-            ft.add(R.id.linearLayoutRestaurant, mealFragment).commit();
+
+            if(i==0) {
+                ft.add(R.id.Meal1Container, mealFragment, "Fragment" + i);
+            } else if(i==1) {
+                ft.add(R.id.Meal2Container, mealFragment, "Fragment" + i);
+            } else if(i==2) {
+                ft.add(R.id.Meal3Container, mealFragment, "Fragment" + i);
+            }
+//            ft.add(R.id.linearLayoutRestaurant, mealFragment, "Fragment" + i);
+//            ft.add(R.id.linearLayoutRestaurant, mealFragment);
+            ft.commit();
         }
+
 
 
 
