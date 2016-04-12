@@ -10,13 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import com.example.sahil.myapplication.FeastObjects.FeastObjects.FoodItem;
 import com.example.sahil.myapplication.FeastObjects.FeastObjects.Meal;
 import com.example.sahil.myapplication.FeastObjects.FeastObjects.Menu;
 import com.example.sahil.myapplication.FeastObjects.FeastObjects.Restaurant;
+import com.example.sahil.myapplication.FeastObjects.FeastObjects.Section;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import feast.MealSection;
 
 
 /**
@@ -54,12 +59,29 @@ public class RestaurantFragment extends Fragment {
         // get the meals for the day (breakfast, lunch, dinner)
         ArrayList<Meal> mealsOfDay = dateSelectedMenu.getMeals();
 
+        ArrayList<ListItemParent> listItems = new ArrayList<ListItemParent>();
         for(int i=0; i < mealsOfDay.size(); i++) {
             // for each Meal - make one header add it to a vector of custom parent type
             // for each section - make a add it to a vector of custom parent type
 
+            Meal currentMeal = mealsOfDay.get(i);
+            ListItemParent mealItem = new ListItemParent(ListItemParent.mealHeader);
+            mealItem.setTitle(currentMeal.getName());
+            listItems.add(mealItem);
 
+            for(Section mealSection: currentMeal.getSections()) {
+                ListItemParent sectionItem = new ListItemParent(ListItemParent.sectionHeader);
+                sectionItem.setTitle(mealSection.getName());
+                listItems.add(sectionItem);
+                for(FoodItem foodItem: mealSection.getFoodItems()) {
+                    ListItemParent food = new ListItemParent(ListItemParent.foodHeader);
+                    food.setTitle(foodItem.getFoodName()); // probably not necessary but oh well
+                    food.setFoodItem(foodItem);
+                    listItems.add(food);
+                }
+            }
 
+            /*
 
             // make a MealFragment for each Meal and add it to the view for the RestaurantFragment
             MealFragment mealFragment = new MealFragment();
@@ -82,6 +104,8 @@ public class RestaurantFragment extends Fragment {
 //            ft.add(R.id.linearLayoutRestaurant, mealFragment, "Fragment" + i);
 //            ft.add(R.id.linearLayoutRestaurant, mealFragment);
             ft.commit();
+
+            */
         }
 
 
@@ -96,50 +120,17 @@ public class RestaurantFragment extends Fragment {
 //        mealListView.setAdapter(mealListAdapter);
 
 
-
+        setUpListView(view, listItems);
 
         return view;
 
     }
 
-
-
-    public class MealListAdapter extends ArrayAdapter<Meal> {
-//        List<Meal> meals;
-
-        public MealListAdapter(Context context, int resource, List<Meal> objects) {
-            super(context, resource, objects);
-        }
-
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            return super.getView(position, convertView, parent);
-        }
+    private void setUpListView(View view, ArrayList<ListItemParent> listItems) {
+        MyListAdapter myListAdapter = new MyListAdapter(getContext(), R.id.mealListView, listItems);
+        ListView mealListView= (ListView) view.findViewById(R.id.mealListView);
+        mealListView.setAdapter(myListAdapter);
     }
-
-
-
-
-//    public static RestaurantFragment newInstance(Restaurant restaurant) {
-//        RestaurantFragment fragment = new RestaurantFragment();
-////        Bundle args = new Bundle();
-////        args.putString(ARG_PARAM1, param1);
-////        args.putString(ARG_PARAM2, param2);
-////        fragment.setArguments(args);
-//
-//        return fragment;
-//    }
-
-
-
-
-
-
-
-
-
-
 
     /*
 
