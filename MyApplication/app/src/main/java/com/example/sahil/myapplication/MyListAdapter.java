@@ -38,7 +38,7 @@ public class MyListAdapter extends ArrayAdapter<ListItemParent> {
 
         // first check to see if the view is null. if so, we have to inflate it.
         // to inflate it basically means to render, or show, the view.
-        if (view == null) {
+//        if (view == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             if(currentItem.getType() == ListItemParent.mealHeader) {
                 view = inflater.inflate(R.layout.meal_header_row, null);
@@ -50,7 +50,7 @@ public class MyListAdapter extends ArrayAdapter<ListItemParent> {
                 view = inflater.inflate(R.layout.food_item_row, null);
                 itemViewType = ListItemParent.foodHeader;
             }
-        }
+//        }
 
 
         if(currentItem != null) {
