@@ -24,6 +24,14 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Set;
+
+import feast.FeastAPI;
+import feast.Menu;
+
 public class LoginActivity extends Activity {
 
     private static String CLIENT_ID = "820762424096-qr8fr039sqs5nvch7qhfa3juu81k4r96.apps.googleusercontent.com";
@@ -117,6 +125,31 @@ public class LoginActivity extends Activity {
                 startActivityForResult(intent, 0);
             }
         });
+
+
+
+        /*
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = null;
+        try
+        {
+            date = dateFormat.parse("2016/04/15");
+            Log.w("Sahil", "date is " + date);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        FeastAPI.sharedAPI.fetchMenusForDateWithCompletion(date, new FeastAPI.MenusCallback() {
+            @Override
+            public void fetchedMenus(Set<Menu> menus) {
+                Log.w("Riley", menus.toString());
+                MyAppApplication mApp = ((MyAppApplication)getApplicationContext());
+                mApp.setGlobalVarValue(menus);
+            }
+        });
+
+        */
 
 
 

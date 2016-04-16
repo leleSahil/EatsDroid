@@ -1,7 +1,6 @@
 package com.example.sahil.myapplication;
 
-
-import com.example.sahil.myapplication.FeastObjects.FeastObjects.FoodItem;
+import feast.FoodItem;
 
 /**
  * Created by Sahil on 4/11/16.

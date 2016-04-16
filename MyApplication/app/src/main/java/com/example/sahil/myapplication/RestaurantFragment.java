@@ -12,15 +12,22 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.example.sahil.myapplication.FeastObjects.FeastObjects.FoodItem;
-import com.example.sahil.myapplication.FeastObjects.FeastObjects.Meal;
-import com.example.sahil.myapplication.FeastObjects.FeastObjects.Menu;
-import com.example.sahil.myapplication.FeastObjects.FeastObjects.Restaurant;
-import com.example.sahil.myapplication.FeastObjects.FeastObjects.Section;
+//import com.example.sahil.myapplication.FeastObjects.FeastObjects.FoodItem;
+//import com.example.sahil.myapplication.FeastObjects.FeastObjects.Meal;
+//import com.example.sahil.myapplication.FeastObjects.FeastObjects.Menu;
+//import com.example.sahil.myapplication.FeastObjects.FeastObjects.Restaurant;
+//import com.example.sahil.myapplication.FeastObjects.FeastObjects.Section;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
+import feast.FeastAPI;
+import feast.FoodItem;
+import feast.Meal;
 import feast.MealSection;
 
 
@@ -32,8 +39,10 @@ public class RestaurantFragment extends Fragment {
 //    MealRecyclerViewAdapter mealRecyclerViewAdapter;
 
     String diningHallID;
-    ArrayList<Meal> meals = new ArrayList<>();
-    Restaurant restaurant;
+    Set<feast.Menu> menuSet;
+
+    ArrayList<ListItemParent> listItems;
+
 
     private static final int CONTENT_VIEW_ID = 10101010; // have to set this for programmatically adding FragmentViews?
 
@@ -50,78 +59,66 @@ public class RestaurantFragment extends Fragment {
 //        diningHallID = getArguments().getString("Dining Hall ID");
 
         //get the currentlySelectedRestaurant
-        restaurant = new Restaurant(); // would change this
-        Log.d("Sahil", "Made a new restaurant: " + restaurant.getName());
+//        restaurant = new Restaurant(); // would change this
+
+
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = null;
+        try
+        {
+            date = dateFormat.parse("2016/04/15");
+            Log.w("Sahil", "date is " + date);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        FeastAPI.sharedAPI.fetchMenusForDateWithCompletion(date, new FeastAPI.MenusCallback() {
+            @Override
+            public void fetchedMenus(Set<feast.Menu> menus) {
+                Log.w("Riley", menus.toString());
+                menuSet = menus;
+                // recreate ArrayList<ListItemParent> listItems
+                // notifyDataSetChanged()
+            }
+        });
+
+
+
+        while (menuSet == null) {
+
+        }
 
         // get the desired date's selected Menu
-        Menu dateSelectedMenu = restaurant.getMenus().get(0); // would change this to select the right date
+        feast.Menu dateSelectedMenu = menuSet.iterator().next(); // would change this to select the right date
 
         // get the meals for the day (breakfast, lunch, dinner)
-        ArrayList<Meal> mealsOfDay = dateSelectedMenu.getMeals();
+//        ArrayList<Meal> mealsOfDay = dateSelectedMenu.getMeals();
 
         ArrayList<ListItemParent> listItems = new ArrayList<ListItemParent>();
-        for(int i=0; i < mealsOfDay.size(); i++) {
+        for(Meal currentMeal: dateSelectedMenu.getMeals()) { // int i=0; i < mealsOfDay.size(); i++
             // for each Meal - make one header add it to a vector of custom parent type
             // for each section - make a add it to a vector of custom parent type
 
-            Meal currentMeal = mealsOfDay.get(i);
+//            Meal currentMeal = mealsOfDay.get(i);
             ListItemParent mealItem = new ListItemParent(ListItemParent.mealHeader);
             mealItem.setTitle(currentMeal.getName());
             listItems.add(mealItem);
 
-            for(Section mealSection: currentMeal.getSections()) {
+            for(MealSection mealSection: currentMeal.getMealSections()) {
                 ListItemParent sectionItem = new ListItemParent(ListItemParent.sectionHeader);
                 sectionItem.setTitle(mealSection.getName());
                 listItems.add(sectionItem);
                 for(FoodItem foodItem: mealSection.getFoodItems()) {
                     ListItemParent food = new ListItemParent(ListItemParent.foodHeader);
-                    food.setTitle(foodItem.getFoodName()); // probably not necessary but oh well
+                    food.setTitle(foodItem.getName()); // probably not necessary but oh well
                     food.setFoodItem(foodItem);
                     listItems.add(food);
                 }
             }
-
-            /*
-
-            // make a MealFragment for each Meal and add it to the view for the RestaurantFragment
-            MealFragment mealFragment = new MealFragment();
-            // pass whatever data to the mealFragment that you need to through the arguments
-
-            Bundle args = new Bundle();
-            args.putInt("MealType", i);
-            mealFragment.setArguments(args);
-
-            FragmentManager fm = getChildFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-
-            if(i==0) {
-                ft.add(R.id.Meal1Container, mealFragment, "Fragment" + i);
-            } else if(i==1) {
-                ft.add(R.id.Meal2Container, mealFragment, "Fragment" + i);
-            } else if(i==2) {
-                ft.add(R.id.Meal3Container, mealFragment, "Fragment" + i);
-            }
-//            ft.add(R.id.linearLayoutRestaurant, mealFragment, "Fragment" + i);
-//            ft.add(R.id.linearLayoutRestaurant, mealFragment);
-            ft.commit();
-
-            */
         }
-
-
-
-
-        // using listView for Each meal ~ scrapped ~
-
-        // 2nd parameter takes the listView
-
-//        MealListAdapter mealListAdapter = new MealListAdapter(this.getContext(), R.id.meal_list, mealsOfDay);
-//        ListView mealListView= (ListView) view.findViewById(R.id.meal_list);
-//        mealListView.setAdapter(mealListAdapter);
-
-
         setUpListView(view, listItems);
-
         return view;
 
     }
@@ -188,6 +185,13 @@ public class RestaurantFragment extends Fragment {
             public class
         }
     }
+
     */
+
+
+
+
+
+
 }
 
