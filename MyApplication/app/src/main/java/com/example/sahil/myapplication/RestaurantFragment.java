@@ -29,6 +29,7 @@ import feast.FeastAPI;
 import feast.FoodItem;
 import feast.Meal;
 import feast.MealSection;
+import feast.Menu;
 
 
 /**
@@ -42,26 +43,34 @@ public class RestaurantFragment extends Fragment {
     Set<feast.Menu> menuSet;
 
     ArrayList<ListItemParent> listItems;
+    MyListAdapter myListAdapter;
 
 
     private static final int CONTENT_VIEW_ID = 10101010; // have to set this for programmatically adding FragmentViews?
 
     public RestaurantFragment() {
 //        this.restaurant = restaurant;
+        initializeListItems();
+    }
+
+    private void initializeListItems() {
+        // create one meal
+        Meal dummyMeal = new Meal();
+        dummyMeal.setName("Waiting for Data");
+//        dummyMeal.setMealSections(new ArrayList<MealSection>());
+//        MealSection dummyMealSection = new MealSection();
+//        dummyMealSection.setMeal(dummyMeal);
+
+
+        listItems = new ArrayList<ListItemParent>();
+        ListItemParent mealItem = new ListItemParent(ListItemParent.mealHeader);
+        mealItem.setTitle(dummyMeal.getName());
+        listItems.add(mealItem);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.restaurant_fragment, container, false); // false as third parameter?
-
-        // return super.onCreateView(inflater, container, savedInstanceState);
-
-//        diningHallID = getArguments().getString("Dining Hall ID");
-
-        //get the currentlySelectedRestaurant
-//        restaurant = new Restaurant(); // would change this
-
-
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         Date date = null;
@@ -81,23 +90,32 @@ public class RestaurantFragment extends Fragment {
                 menuSet = menus;
                 // recreate ArrayList<ListItemParent> listItems
                 // notifyDataSetChanged()
+                listItems.clear();
+                updateListItems(menuSet.iterator().next());
+                myListAdapter.notifyDataSetChanged();
             }
         });
+        return populateListView(view, menuSet);
+    }
 
-
-
-        while (menuSet == null) {
-
-        }
-
+    private View populateListView(View view, Set<Menu> menuSet) {
         // get the desired date's selected Menu
-        feast.Menu dateSelectedMenu = menuSet.iterator().next(); // would change this to select the right date
+//        Menu dateSelectedMenu = menuSet.iterator().next(); // would change this to select the right date
 
         // get the meals for the day (breakfast, lunch, dinner)
 //        ArrayList<Meal> mealsOfDay = dateSelectedMenu.getMeals();
 
-        ArrayList<ListItemParent> listItems = new ArrayList<ListItemParent>();
-        for(Meal currentMeal: dateSelectedMenu.getMeals()) { // int i=0; i < mealsOfDay.size(); i++
+//        listItems = new ArrayList<ListItemParent>();
+//        updateListItems(dateSelectedMenu);
+
+
+
+        setUpListView(view);
+        return view;
+    }
+
+    private void updateListItems(Menu selectedMenu) {
+        for(Meal currentMeal: selectedMenu.getMeals()) { // int i=0; i < mealsOfDay.size(); i++
             // for each Meal - make one header add it to a vector of custom parent type
             // for each section - make a add it to a vector of custom parent type
 
@@ -118,80 +136,12 @@ public class RestaurantFragment extends Fragment {
                 }
             }
         }
-        setUpListView(view, listItems);
-        return view;
-
     }
 
-    private void setUpListView(View view, ArrayList<ListItemParent> listItems) {
-        MyListAdapter myListAdapter = new MyListAdapter(getContext(), R.id.mealListView, listItems);
+    private void setUpListView(View view) {
+        myListAdapter = new MyListAdapter(getContext(), R.id.mealListView, listItems);
         ListView mealListView= (ListView) view.findViewById(R.id.mealListView);
         mealListView.setAdapter(myListAdapter);
     }
-
-    /*
-
-    private void createRecyclerView() {
-        Restaurant restaurant = DBWrapper.getRestaurants(new Date()).get(Integer.getInteger(diningHallID));
-
-        if(restaurant != null) {
-            meals = restaurant.getMenus().get(0).getMeals();
-        } else {
-            meals = new ArrayList<>();
-        }
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-        mealRecyclerViewAdapter = new MealRecyclerViewAdapter(meals);
-        recyclerView.setAdapter(mealRecyclerViewAdapter);
-
-    }
-
-    private static class MealRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        ArrayList<Meal> meals;
-        private Context context;
-
-
-
-        public MealRecyclerViewAdapter(ArrayList<Meal> meals) {
-            this.meals = meals;
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.)
-            return new ViewHolder()
-        }
-
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return 0;
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-
-        }
-
-        private static class ViewHolder extends RecyclerView.ViewHolder{
-            public ViewHolder(View itemView) {
-                super(itemView);
-            }
-
-
-            public class
-        }
-    }
-
-    */
-
-
-
-
-
-
 }
 
