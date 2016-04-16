@@ -3,10 +3,12 @@ package feast;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -24,6 +26,11 @@ import feast.parsers.FoodItemParser;
  */
 public class FeastAPI
 {
+    public interface RequestCallback
+    {
+        public void requestFinishedWithSuccess(Boolean success);
+    }
+
     public interface FavoritesCallback
     {
         public void fetchedFavorites(Set<FoodItem> favorites);
@@ -77,6 +84,38 @@ public class FeastAPI
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.w("Riley", error.toString());
+            }
+        });
+
+        this.requestQueue.add(request);
+    }
+
+    public void addFavoriteWithCompletion(FoodItem favorite, final RequestCallback callback)
+    {
+        String href = this.baseURL + "/users/" + this.userIdentifier + "/favorites";
+
+        JSONObject object = null;
+
+        try
+        {
+            object = new JSONObject();
+            object.put("food_identifier", favorite.getIdentifier());
+            object.put("food_name", favorite.getName());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, href, object, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                callback.requestFinishedWithSuccess(true);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.requestFinishedWithSuccess(false);
             }
         });
 
