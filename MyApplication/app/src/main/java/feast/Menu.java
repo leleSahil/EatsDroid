@@ -13,7 +13,6 @@ public class Menu
 
     // Relationships
     private Set<Meal> meals;
-    private Restaurant restaurant;
 
     public int getIdentifier() {
         return identifier;
@@ -39,11 +38,7 @@ public class Menu
         this.meals = meals;
     }
 
-    public Restaurant getRestaurant() {
-        return restaurant;
     }
 
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
     }
 }
