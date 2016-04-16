@@ -122,5 +122,25 @@ public class FeastAPI
         this.requestQueue.add(request);
     }
 
+    public void removeFavoriteWithCompletion(FoodItem favorite, final  RequestCallback callback)
+    {
+        String href = this.baseURL + "/users/" + this.userIdentifier + "/favorites/" + favorite.getIdentifier();
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE, href, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                callback.requestFinishedWithSuccess(true);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.requestFinishedWithSuccess(false);
+            }
+        });
+
+        this.requestQueue.add(request);
+    }
+
+
 
 }
