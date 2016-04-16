@@ -4,18 +4,15 @@ package com.example.sahil.myapplication;
 
 /* attempt at webview here */
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
@@ -23,6 +20,9 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LoginActivity extends Activity {
 
@@ -34,7 +34,7 @@ public class LoginActivity extends Activity {
     private static String GRANT_TYPE="authorization_code";
     private static String TOKEN_URL ="https://accounts.google.com/o/oauth2/token";
     private static String OAUTH_URL ="https://accounts.google.com/o/oauth2/auth";
-    private static String OAUTH_SCOPE="https://www.googleapis.com/auth/urlshortener";
+    private static String OAUTH_SCOPE="https://www.googleapis.com/auth/userinfo.email";
     //Change the Scope as you need
     WebView web;
     Button auth;
