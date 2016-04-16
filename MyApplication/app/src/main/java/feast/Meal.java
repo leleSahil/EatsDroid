@@ -1,27 +1,28 @@
 package feast;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Set;
 
 /**
  * Created by Riley on 4/11/16.
  */
-public class Meal
+public class Meal implements Comparable<Meal>
 {
-    private int identifier;
+    private String identifier;
     private String name;
     private Date startTime;
     private Date endTime;
 
     // Relationships
-    private Set<MealSection> mealSections;
+    private ArrayList<MealSection> mealSections;
     private Menu menu;
 
-    public int getIdentifier() {
+    public String getIdentifier() {
         return identifier;
     }
 
-    public void setIdentifier(int identifier) {
+    public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
 
@@ -49,11 +50,11 @@ public class Meal
         this.endTime = endTime;
     }
 
-    public Set<MealSection> getMealSections() {
+    public ArrayList<MealSection> getMealSections() {
         return mealSections;
     }
 
-    public void setMealSections(Set<MealSection> mealSections) {
+    public void setMealSections(ArrayList<MealSection> mealSections) {
         this.mealSections = mealSections;
     }
 
@@ -63,5 +64,10 @@ public class Meal
 
     public void setMenu(Menu menu) {
         this.menu = menu;
+    }
+
+    @Override
+    public int compareTo(Meal meal) {
+        return this.startTime.compareTo(meal.startTime);
     }
 }

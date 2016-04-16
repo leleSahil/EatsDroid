@@ -1,11 +1,17 @@
 package feast.parsers;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.Locale;
 
 import feast.Meal;
+import feast.MealSection;
 import feast.Menu;
 
 /**
@@ -13,6 +19,8 @@ import feast.Menu;
  */
 public class MealParser {
     private SimpleDateFormat dateFormat;
+
+    private MealSectionParser mealSectionParser = new MealSectionParser();
 
     MealParser() {
         this.dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
@@ -22,14 +30,38 @@ public class MealParser {
         Meal meal = new Meal();
 
         try {
-            meal.setIdentifier(object.getInt("meal_identifier"));
+            meal.setIdentifier(object.getString("meal_identifier"));
             meal.setName(object.getString("meal_name"));
 
-            String startTimeString = object.getString("meal_begin_time");
-            String endTimeString = object.getString("meal_end_time");
+            meal.setStartTime(new Date(object.getLong("meal_begin_time")));
+            meal.setEndTime(new Date(object.getLong("meal_end_time")));
 
-            meal.setStartTime(this.dateFormat.parse(startTimeString));
-            meal.setEndTime(this.dateFormat.parse(endTimeString));
+
+            JSONArray array = (JSONArray)object.get("meal_sections");
+
+            ArrayList<MealSection> mealSections = new ArrayList<MealSection>();
+
+            for (int i = 0; i < array.length(); i++)
+            {
+                try
+                {
+                    JSONObject mealSectionObject = array.getJSONObject(i);
+
+                    MealSection mealSection = mealSectionParser.parsedMealSectionFromJSON(mealSectionObject);
+                    mealSection.setMeal(meal);
+
+                    mealSections.add(mealSection);
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+
+            Collections.sort(mealSections);
+
+            meal.setMealSections(mealSections);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

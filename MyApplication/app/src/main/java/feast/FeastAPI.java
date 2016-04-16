@@ -15,11 +15,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import feast.parsers.FoodItemParser;
+import feast.parsers.MenuParser;
 
 /**
  * Created by Riley on 4/10/16.
@@ -34,6 +37,11 @@ public class FeastAPI
     public interface FavoritesCallback
     {
         public void fetchedFavorites(Set<FoodItem> favorites);
+    }
+
+    public interface MenusCallback
+    {
+        public void fetchedMenus(Set<Menu> menus);
     }
 
     public void setContext(Context context)
@@ -51,6 +59,47 @@ public class FeastAPI
     {
 
     }
+
+    public void fetchMenusForDateWithCompletion(Date date, final MenusCallback callback)
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        String href = this.baseURL + "/menus?date=" + dateFormat.format(date);
+
+        JsonArrayRequest request = new JsonArrayRequest(href, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                MenuParser parser = new MenuParser();
+
+                Set<Menu> menus = new HashSet<Menu>();
+
+                for (int i = 0; i < response.length(); i++)
+                {
+                    try
+                    {
+                        JSONObject object = response.getJSONObject(i);
+
+                        Menu menu = parser.parsedMenuFromJSON(object);
+                        menus.add(menu);
+                    }
+                    catch (JSONException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+
+                callback.fetchedMenus(menus);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.w("Riley", error.toString());
+            }
+        });
+
+        this.requestQueue.add(request);
+    }
+
 
     public void fetchFavoritesWithCompletion(final FavoritesCallback callback)
     {

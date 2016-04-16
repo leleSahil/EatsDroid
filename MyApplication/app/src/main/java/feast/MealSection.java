@@ -1,24 +1,26 @@
 package feast;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Set;
 
 /**
  * Created by Riley on 4/11/16.
  */
-public class MealSection
+public class MealSection implements Comparable<MealSection>
 {
-    private int identifier;
+    private String identifier;
     private String name;
 
     // Relationships
-    private Set<FoodItem> foodItems;
+    private ArrayList<FoodItem> foodItems;
     private Meal meal;
 
-    public int getIdentifier() {
+    public String getIdentifier() {
         return identifier;
     }
 
-    public void setIdentifier(int identifier) {
+    public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
 
@@ -30,11 +32,11 @@ public class MealSection
         this.name = name;
     }
 
-    public Set<FoodItem> getFoodItems() {
+    public ArrayList<FoodItem> getFoodItems() {
         return foodItems;
     }
 
-    public void setFoodItems(Set<FoodItem> foodItems) {
+    public void setFoodItems(ArrayList<FoodItem> foodItems) {
         this.foodItems = foodItems;
     }
 
@@ -44,5 +46,10 @@ public class MealSection
 
     public void setMeal(Meal meal) {
         this.meal = meal;
+    }
+
+    @Override
+    public int compareTo(MealSection meal) {
+        return this.name.compareTo(meal.name);
     }
 }

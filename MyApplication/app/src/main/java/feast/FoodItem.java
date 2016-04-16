@@ -5,7 +5,7 @@ import java.util.Set;
 /**
  * Created by Riley on 4/10/16.
  */
-public class FoodItem
+public class FoodItem implements Comparable<FoodItem>
 {
     public enum Type
     {
@@ -16,9 +16,6 @@ public class FoodItem
     private String name;
 
     private Type dietType;
-
-    // Relationships
-    private Set<MealSection> mealSections;
 
     public String getIdentifier() {
         return identifier;
@@ -44,14 +41,6 @@ public class FoodItem
         this.dietType = dietType;
     }
 
-    public Set<MealSection> getMealSections() {
-        return mealSections;
-    }
-
-    public void setMealSections(Set<MealSection> mealSections) {
-        this.mealSections = mealSections;
-    }
-
     @Override
     public int hashCode()
     {
@@ -69,5 +58,10 @@ public class FoodItem
         FoodItem foodItem = (FoodItem)o;
 
         return this.identifier.equals(foodItem.identifier);
+    }
+
+    @Override
+    public int compareTo(FoodItem foodItem) {
+        return this.name.compareTo(foodItem.name);
     }
 }
