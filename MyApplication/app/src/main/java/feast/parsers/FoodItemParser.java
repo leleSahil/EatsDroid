@@ -35,8 +35,7 @@ public class FoodItemParser
             foodName.trim();
             foodItem.setName(foodName);
 
-
-            foodItem.setIdentifier(object.getInt("food_identifier"));
+            foodItem.setIdentifier(object.getString("food_identifier"));
         }
         catch (Exception e)
         {

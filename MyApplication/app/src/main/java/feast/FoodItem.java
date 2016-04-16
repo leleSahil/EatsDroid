@@ -12,20 +12,19 @@ public class FoodItem
         ANY, VEGETARIAN, VEGAN
     }
 
-    private int identifier;
+    private String identifier;
     private String name;
 
     private Type dietType;
 
     // Relationships
-    private Favorite favorite;
     private Set<MealSection> mealSections;
 
-    public int getIdentifier() {
+    public String getIdentifier() {
         return identifier;
     }
 
-    public void setIdentifier(int identifier) {
+    public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
 
@@ -45,19 +44,30 @@ public class FoodItem
         this.dietType = dietType;
     }
 
-    public Favorite getFavorite() {
-        return favorite;
-    }
-
-    public void setFavorite(Favorite favorite) {
-        this.favorite = favorite;
-    }
-
     public Set<MealSection> getMealSections() {
         return mealSections;
     }
 
     public void setMealSections(Set<MealSection> mealSections) {
         this.mealSections = mealSections;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return identifier.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o instanceof FoodItem == false)
+        {
+            return false;
+        }
+
+        FoodItem foodItem = (FoodItem)o;
+
+        return this.identifier.equals(foodItem.identifier);
     }
 }
