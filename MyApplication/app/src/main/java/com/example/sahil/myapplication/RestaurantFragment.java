@@ -197,7 +197,7 @@ public class RestaurantFragment extends Fragment {
                             // recreate ArrayList<ListItemParent> listItems
                             // notifyDataSetChanged()
                             listItems.clear();
-                            updateListItems(menus.get(new Integer(0)));
+                            updateListItems(menus.get(new Integer(diningHallID)));
                             myListAdapter.notifyDataSetChanged();
                         }
                     }

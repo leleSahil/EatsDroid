@@ -9,11 +9,16 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.sun.net.httpserver.HttpExchange;
+import org.bson.BSON;
 import org.bson.Document;
+import org.bson.Transformer;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by brian on 4/15/16.
@@ -33,22 +38,49 @@ public class MenuController implements JsonRequestHandlerInterface {
                 return NotFoundRequestHandler.throw404(t);
             }
 
-            Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"), Locale.US);
-            c.set(Calendar.YEAR, Integer.parseInt(dateElements[0])); // regular year
-            c.set(Calendar.MONTH, Integer.parseInt(dateElements[1])-1); // from 0 - 11
-            c.set(Calendar.DATE, Integer.parseInt(dateElements[2]));  // from 1 - 31..
-            c.set(Calendar.HOUR, 0);
-            c.set(Calendar.MINUTE, 0);
-            c.set(Calendar.SECOND, 0);
-            c.set(Calendar.MILLISECOND, 0);
+//            Calendar c = Calendar.getInstance(TimeZone.getTimeZone("PDT"), Locale.US);
 
-            System.out.println(c.getTime());
-            return new ResponseTuple(200, getMenus(c.getTime()));
+
+//            Calendar c = new GregorianCalendar();
+
+//            c.set(Calendar.YEAR, 2016); // regular year
+//            c.set(Calendar.MONTH, 3); // from 0 - 11
+//            c.set(Calendar.DATE, 20);  // from 1 - 31..
+
+//            c.set(Calendar.YEAR, Integer.parseInt(dateElements[0])); // regular year
+//            c.set(Calendar.MONTH, Integer.parseInt(dateElements[1])-1); // from 0 - 11
+//            c.set(Calendar.DATE, Integer.parseInt(dateElements[2]));  // from 1 - 31..
+//
+//            c.set(Calendar.HOUR, 5);
+//            c.set(Calendar.MINUTE, 0);
+//            c.set(Calendar.SECOND, 0);
+//            c.set(Calendar.MILLISECOND, 0);
+//
+//            System.out.println(c);
+//            System.out.println(c.getTime());
+            BSON.addEncodingHook(DateTime.class, new Transformer() {
+                @Override
+                public Object transform(final Object o) {
+                    return new Date(((DateTime) o).getMillis());
+                }
+            });
+            // Add hook to decode java.util.Date as a Joda DateTime
+            BSON.addDecodingHook(Date.class, new Transformer() {
+                @Override
+                public Object transform(final Object o) {
+                    return new DateTime(((Date) o).getTime());
+                }
+            });
+
+            DateTime date = new DateTime( dateElements[0]+"-"+dateElements[1]+"-"+dateElements[2]+"T00:00:00Z" );
+            System.out.println(date);
+            System.out.println( DateTimeZone.getDefault() );
+            return new ResponseTuple(200, getMenus(date));
         }
         return NotFoundRequestHandler.throw404(t);
 
     }
-    public String getMenus(Date date){
+    public String getMenus(DateTime date){
         MongoCollection<Document> collection = DatabaseSingleton.getInstance().database.getCollection("menus");
 
         BasicDBObject query = new BasicDBObject();
