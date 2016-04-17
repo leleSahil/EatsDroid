@@ -74,13 +74,14 @@ public class MyListAdapter extends ArrayAdapter<ListItemParent> {
                 TextView foodItemName = (TextView) view.findViewById(R.id.food_item_text);
                 foodItemName.setText(currentItem.getTitle());
                 ImageView imageView = (ImageView) view.findViewById(R.id.dietary_identifier);
-//                if (currentItem.getFoodItem().isV()) {
-//                    imageView.setImageResource(R.drawable.iconvegan);
-//                } else if (currentItem.getFoodItem().isVT()) {
-//                    imageView.setImageResource(R.drawable.iconvegetarian);
-//                } else {
-//                    imageView.setVisibility(View.GONE);
-//                }
+
+                if (currentItem.getFoodItem().getDietType() == FoodItem.Type.VEGAN) {
+                    imageView.setImageResource(R.drawable.iconvegan);
+                } else if (currentItem.getFoodItem().getDietType() == FoodItem.Type.VEGETARIAN) {
+                    imageView.setImageResource(R.drawable.iconvegetarian);
+                } else {
+                    imageView.setVisibility(View.GONE);
+                }
 
                 CheckBox checkBox = (CheckBox)view.findViewById(R.id.checkbox);
 
