@@ -81,7 +81,7 @@ public class CalendarUtils {
         calendar.setTime(trialTime);
 
         Log.d("Nikhil", "Month: " + Calendar.MONTH);
-        return calendar.get(Calendar.MONTH);
+        return calendar.get(Calendar.MONTH) + 1;
     }
 
     public static int getYear() {

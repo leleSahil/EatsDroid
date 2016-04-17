@@ -121,8 +121,7 @@ public class RestaurantFragment extends Fragment {
         try
         {
             date = dateFormat.parse("2016/04/17");
-//            date = dateFormat.parse(year + "/" + month + "/" + year);
-            Log.w("Sahil", "date is " + date);
+//            date = dateFormat.parse(year + "/" + month + "/" + day); TODO commment this back in, some problem with today's menu
         }
         catch (Exception e)
         {
@@ -192,17 +191,6 @@ public class RestaurantFragment extends Fragment {
 
 
     private View populateListView(View view, Set<Menu> menuSet) {
-        // get the desired date's selected Menu
-//        Menu dateSelectedMenu = menuSet.iterator().next(); // would change this to select the right date
-
-        // get the meals for the day (breakfast, lunch, dinner)
-//        ArrayList<Meal> mealsOfDay = dateSelectedMenu.getMeals();
-
-//        listItems = new ArrayList<ListItemParent>();
-//        updateListItems(dateSelectedMenu);
-
-
-
         setUpListView(view);
         return view;
     }
@@ -248,18 +236,13 @@ public class RestaurantFragment extends Fragment {
         Log.w("Sahil", "Date set to " + year + "-" +  month + "-" + day);
     }
 
-//    public void blah() {
-//        Log.w("Sahil", "blah");
-//    }
-
-
     public void refreshMenus() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         Date date = null;
         try
         {
 //            date = dateFormat.parse("2016/04/17");
-            date = dateFormat.parse(year + "/" + month + "/" + year);
+            date = dateFormat.parse(year + "/" + month + "/" + day);
 //            date = new Date(year, month, day);
             Log.w("Sahil", "date from refresh menus is " + date);
         } catch (ParseException e) {
