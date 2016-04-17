@@ -1,29 +1,26 @@
 package ServerGUI;
 
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Point;
-import java.awt.Toolkit;
+import com.company.client.Client;
+import com.company.client.ResponseInterface;
+import com.company.models.Menu;
+import com.company.sockets.AuthenticationChecker;
+import com.company.sockets.Request;
+import com.company.sockets.Response;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Method;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Enumeration;
+import java.util.*;
 import java.util.List;
+<<<<<<< HEAD
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -328,7 +325,11 @@ public class ClientFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				String curr = (String)restaurantChooser.getSelectedItem();
 				for (Menu menu : menus){
+<<<<<<< HEAD
 					if (menu.restaurant_name == restaurantChooser.getSelectedItem()) {
+=======
+					if (menu.restaurant_name.equals(restaurantChooser.getSelectedItem())) {
+>>>>>>> 836a16133d23b463f8750da1e9da8ab3ae5fe725
 						for (Menu.Meal m : menu.meals) {
 							foodChooser.addItem(m);
 							for (Menu.MealSections s : m.meal_sections) {

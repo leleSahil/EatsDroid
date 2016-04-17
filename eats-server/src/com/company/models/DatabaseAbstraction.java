@@ -2,15 +2,13 @@ package com.company.models;
 
 import com.company.Constants;
 import org.bson.types.ObjectId;
+import org.joda.time.DateTime;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 /**
  * Created by brian on 4/16/16.
@@ -98,8 +96,23 @@ public class DatabaseAbstraction {
     }
 
     public static List<Menu>  getMenus(Calendar date){
+        String yo = date.get(Calendar.YEAR)+"-"+String.format("%02d", (date.get(Calendar.MONTH)+1))+"-"+date.get(Calendar.DATE)+"T00:00:00Z";
+        System.out.println(yo);
+        java.util.Date datetimeDate = new DateTime( yo ).toDate();
+        java.util.Date newdatetimeDate = new DateTime( "2016-04-13T00:00:00Z" ).toDate();
+        System.out.println("YOFOIEWOF");
+        System.out.println(datetimeDate);
+        System.out.println(newdatetimeDate);
+        System.out.println(datetimeDate.getTime());
+        Calendar greg = new GregorianCalendar(2014, 1, 22);
+        System.out.println(greg.getTime());
+//        if(true){
+//            return null;
+//        }
         Datastore ds = new Morphia().createDatastore(DatabaseSingleton.getInstance().getClient(), Constants.MONGO_DB);
-        Query q = ds.createQuery(Menu.class).filter("date =", date.getTime());
+        System.out.println(date);
+
+        Query q = ds.createQuery(Menu.class).filter("date =", datetimeDate);
         return q.asList();
     }
 

@@ -1,10 +1,16 @@
 package com.company.server;
 
+import com.company.models.DatabaseAbstraction;
+import com.company.models.Menu;
 import com.company.sockets.EatsSocketServer;
 import com.sun.net.httpserver.HttpServer;
 import org.joda.time.DateTime;
 
 import java.net.InetSocketAddress;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 class Main {
 
@@ -14,9 +20,21 @@ class Main {
 
         java.util.Date date = new DateTime( "2016-04-13T00:00:00Z" ).toDate();
         System.out.println(date);
-        if(!true){
-            return;
-        }
+
+        Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"), Locale.US);
+        c.set(Calendar.YEAR, 2016); // regular year
+        c.set(Calendar.MONTH, 3); // from 0 - 11
+        c.set(Calendar.DATE, 13);  // from 1 - 31..
+        c.set(Calendar.HOUR, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+
+        List<Menu> menus = DatabaseAbstraction.getMenus(c);
+        System.out.println("OUTS: "+menus.size());
+//        if(true){
+//            return;
+//        }
         System.out.println("Starting socket server on port 8001...");
         EatsSocketServer.startServer();
 
