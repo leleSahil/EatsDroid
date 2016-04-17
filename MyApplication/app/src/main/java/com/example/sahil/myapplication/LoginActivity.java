@@ -21,6 +21,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,6 +30,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import feast.FeastAPI;
 import feast.Menu;
@@ -196,8 +200,40 @@ public class LoginActivity extends Activity {
                     Log.d("Token Access", tok);
                     Log.d("Expire", expire);
                     Log.d("Refresh", refresh);
+                    Log.d("Cherrie", "Before Feast API call");
                     auth.setText("Authenticated");
                     Access.setText("Access Token:"+tok+"nExpires:"+expire+"nRefresh Token:"+refresh);
+                    Log.d("Cherrie", "Before Feast API call");
+                    FeastAPI.sharedAPI.authorizeUserWithOAuthToken(tok, new FeastAPI.RequestCallback() {
+                        @Override
+                        public void requestFinishedWithSuccess(Boolean success, VolleyError error) {
+                            Log.d("Cherrie", "Success: " + success);
+                            if(success == true){
+                                Log.d("Cherrie", "Made it inside of the if statement");
+                                // stays on authenticated page for 2 seconds
+//                                int timeout = 2000;
+//
+//                                Timer timer = new Timer();
+//                                timer.schedule(new TimerTask() {
+//
+//                                    @Override
+//                                    public void run() {
+//                                        System.out.println("We are in timer");
+//                                        finish();
+//                                        Intent homepage = new Intent(LoginActivity.this, MainActivity.class);
+//                                        // goes to the next activity
+//                                        startActivity(homepage);
+//                                        System.out.println("Did we start the next activity?");
+//                                    }
+//                                }, timeout);
+                                Intent goToNextActivity = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(goToNextActivity);
+
+                            }
+                        }
+                    });
+
+
                 } catch (JSONException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
