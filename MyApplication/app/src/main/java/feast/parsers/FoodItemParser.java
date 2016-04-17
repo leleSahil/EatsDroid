@@ -19,12 +19,12 @@ public class FoodItemParser
 
             if (foodName.contains("(V)"))
             {
-                foodName.replace("(V)", "");
+                foodName = foodName.replace("(V)", "");
                 foodItem.setDietType(FoodItem.Type.VEGAN);
             }
             else if (foodName.contains("(VT)"))
             {
-                foodName.replace("(VT)", "");
+                foodName = foodName.replace("(VT)", "");
                 foodItem.setDietType(FoodItem.Type.VEGETARIAN);
             }
             else
@@ -32,7 +32,7 @@ public class FoodItemParser
                 foodItem.setDietType(FoodItem.Type.ANY);
             }
 
-            foodName.trim();
+            foodName = foodName.trim();
             foodItem.setName(foodName);
 
             foodItem.setIdentifier(object.getString("food_identifier"));
