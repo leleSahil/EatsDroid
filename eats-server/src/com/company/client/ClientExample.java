@@ -55,7 +55,7 @@ public class ClientExample {
 
             @Override
             public void run() {
-                System.out.println("SOCKETS: Callback called");
+                System.out.println("SOCKETS: Callback called add");
                 if(this.resp != null && this.resp.requestSuccess){
                     System.out.println("Success");
                 }else{
@@ -77,7 +77,7 @@ public class ClientExample {
 
             @Override
             public void run() {
-                System.out.println("SOCKETS: Callback called");
+                System.out.println("SOCKETS: Callback called delete");
                 if(this.resp != null && this.resp.requestSuccess){
                     System.out.println("Success");
                 }else{
@@ -108,7 +108,7 @@ public class ClientExample {
 
             @Override
             public void run() {
-                System.out.println("SOCKETS: Callback called");
+                System.out.println("SOCKETS: Callback called menus");
                 if(this.resp != null && this.resp.requestSuccess){
                     List<Menu> menus = (List<Menu>)this.resp.data;
                     for(Menu menu : menus){
