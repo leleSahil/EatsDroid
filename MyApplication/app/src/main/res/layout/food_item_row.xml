@@ -37,19 +37,17 @@
             android:layout_gravity="center_vertical"
             android:scaleType="fitXY"
             />
+
         <CheckBox
             android:layout_width="wrap_content"
-            android:layout_height="40sp"
-            android:id="@+id/checkbox"
-            android:layout_gravity="center_vertical"
-            android:button="@null"
-            android:background="@null"
-            android:drawableLeft="@drawable/star"
-            android:text="New Checkbox"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/checkbox" />
 
-            <!--android:button="@drawable/star"
-             android:drawableLeft="@drawable/star"
-             android:background="@drawable/star"-->
+        <!--android:button="@drawable/star"
+         android:drawableLeft="@drawable/star"
+         android:background="@drawable/star"-->
+        <!--android:drawableLeft="@drawable/star"-->
+
 
     </LinearLayout>
 </LinearLayout>

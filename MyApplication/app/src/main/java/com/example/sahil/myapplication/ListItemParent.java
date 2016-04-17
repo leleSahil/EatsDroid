@@ -1,5 +1,7 @@
 package com.example.sahil.myapplication;
 
+import java.util.Set;
+
 import feast.FoodItem;
 
 /**
@@ -13,6 +15,8 @@ public class ListItemParent {
     private String title;
     private FoodItem foodItem;
     private int type;
+
+    private Set<FoodItem> favorites;
 
     public ListItemParent(int type) {
         this.type = type;
@@ -36,5 +40,13 @@ public class ListItemParent {
 
     public int getType() {
         return type;
+    }
+
+    public Set<FoodItem> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(Set<FoodItem> favorites) {
+        this.favorites = favorites;
     }
 }

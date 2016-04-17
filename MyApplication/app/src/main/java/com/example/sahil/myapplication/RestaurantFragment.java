@@ -57,6 +57,10 @@ public class RestaurantFragment extends Fragment {
     ArrayList<ListItemParent> listItems;
     MyListAdapter myListAdapter;
 
+    private Boolean fetchedMenus = false;
+    private Boolean fetchedFavorites = false;
+
+    private Set<FoodItem> favorites = null;
 
     private static final int CONTENT_VIEW_ID = 10101010; // have to set this for programmatically adding FragmentViews?
 
@@ -124,25 +128,68 @@ public class RestaurantFragment extends Fragment {
         {
             e.printStackTrace();
         }
+
+        this.fetchDataForDate(date);
+
+        return populateListView(view, menuSet);
+    }
+
+    private void fetchDataForDate(Date date)
+    {
+        Log.w("Riley", "WTF");
+
         FeastAPI.sharedAPI.fetchMenusForDateWithCompletion(date, new FeastAPI.MenusCallback() {
             @Override
             public void fetchedMenus(Set<feast.Menu> menus, VolleyError error) {
                 if(error == null) {
-                    Log.w("Riley", menus.toString());
+
+                    fetchedMenus = true;
                     menuSet = menus;
-                    // recreate ArrayList<ListItemParent> listItems
-                    // notifyDataSetChanged()
-                    listItems.clear();
-                    updateListItems(menuSet.iterator().next());
-                    myListAdapter.notifyDataSetChanged();
+
+                    Log.w("Riley", menus.toString());
+
+                    if (fetchedFavorites || !FeastAPI.sharedAPI.isUserAuthorized()) {
+
+                        // recreate ArrayList<ListItemParent> listItems
+                        // notifyDataSetChanged()
+                        listItems.clear();
+                        updateListItems(menuSet.iterator().next());
+                        myListAdapter.notifyDataSetChanged();
+                    }
+
+
                 } else {
                     // TODO alert the user that there was an error refreshing
                     Log.w("Sahil", "Error getting data: " + error.toString());
                 }
             }
         });
-        return populateListView(view, menuSet);
+
+        if (FeastAPI.sharedAPI.isUserAuthorized())
+        {
+            FeastAPI.sharedAPI.fetchFavoritesWithCompletion(new FeastAPI.FavoritesCallback() {
+                @Override
+                public void fetchedFavorites(Set<FoodItem> favorites, VolleyError error) {
+                    if (error == null)
+                    {
+                        fetchedFavorites = true;
+
+                        RestaurantFragment.this.favorites = favorites;
+
+                        if (fetchedMenus)
+                        {
+                            // recreate ArrayList<ListItemParent> listItems
+                            // notifyDataSetChanged()
+                            listItems.clear();
+                            updateListItems(menuSet.iterator().next());
+                            myListAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            });
+        }
     }
+
 
     private View populateListView(View view, Set<Menu> menuSet) {
         // get the desired date's selected Menu
@@ -178,6 +225,9 @@ public class RestaurantFragment extends Fragment {
                     ListItemParent food = new ListItemParent(ListItemParent.foodHeader);
                     food.setTitle(foodItem.getName()); // probably not necessary but oh well
                     food.setFoodItem(foodItem);
+
+                    food.setFavorites(this.favorites);
+
                     listItems.add(food);
                 }
             }
@@ -216,23 +266,7 @@ public class RestaurantFragment extends Fragment {
             e.printStackTrace();
         }
 
-        FeastAPI.sharedAPI.fetchMenusForDateWithCompletion(date, new FeastAPI.MenusCallback() {
-            @Override
-            public void fetchedMenus(Set<feast.Menu> menus, VolleyError error) {
-                if(error == null) {
-                    Log.w("Riley", menus.toString());
-                    menuSet = menus;
-                    // recreate ArrayList<ListItemParent> listItems
-                    // notifyDataSetChanged()
-                    listItems.clear();
-                    updateListItems(menuSet.iterator().next());
-                    myListAdapter.notifyDataSetChanged();
-                } else {
-                    // TODO alert the user that there was an error refreshing
-                    Log.w("Sahil", "Error getting data: " + error.toString());
-                }
-            }
-        });
+        this.fetchDataForDate(date);
     }
 }
 
