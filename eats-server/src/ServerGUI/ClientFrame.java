@@ -74,13 +74,16 @@ public class ClientFrame extends JFrame {
 	boolean showLogin = false;
 	
 	private JComboBox<UIDate> dateChooser;
-	private JComboBox<Restaurant> restaurantChooser;
-	private JComboBox<FoodItem> foodChooser;
+	private JComboBox<String> restaurantChooser;
+	private JComboBox foodChooser;
 	private JButton removeButton;
 	private JButton addButton;
 	private JPanel buttonPanel;
 	
+	List<Menu> menus;
+	
 	private boolean loginSuccess = false;
+	private boolean dateSuccess = false;
 	
 	public ClientFrame()
 	{
@@ -117,8 +120,8 @@ public class ClientFrame extends JFrame {
 		
 		Calendar t = Calendar.getInstance();
 		t.setTime(today);
-		restaurantChooser = new JComboBox<Restaurant>();
-		foodChooser = new JComboBox<FoodItem>();
+		restaurantChooser = new JComboBox<String>();
+		foodChooser = new JComboBox();
 		removeButton = new JButton("Remove selected item");
 		addButton = new JButton("Add an item for the selected date and restaurant");
 		buttonPanel = new JPanel();
@@ -147,7 +150,7 @@ public class ClientFrame extends JFrame {
 				loginFields.setMaximumSize(new Dimension(150,100));
 				loginFields.setAlignmentX(CENTER_ALIGNMENT);
 				
-				loginUser = new JTextField("Username");
+				loginUser = new JTextField("admin");
 				loginUser.addMouseListener(new MouseAdapter() {
 					public void mouseClicked(MouseEvent e) {
 						loginUser.setText("");
@@ -156,7 +159,7 @@ public class ClientFrame extends JFrame {
 				loginUser.setAlignmentX(CENTER_ALIGNMENT);
 				loginFields.add(loginUser);
 				
-				loginPass = new JPasswordField("Password");
+				loginPass = new JPasswordField("password");
 				loginPass.addMouseListener(new MouseAdapter() {
 					public void mouseClicked(MouseEvent e) {
 						loginPass.setText("");
@@ -297,30 +300,45 @@ public class ClientFrame extends JFrame {
 		            public void run() {
 		                System.out.println("SOCKETS: Callback called");
 		                if(this.resp != null && this.resp.requestSuccess){
-		                    List<Menu> menus = (List<Menu>)this.resp.data;
+		                    menus = (List<Menu>)this.resp.data;
 		                    for(Menu menu : menus){
 		                        System.out.println("SOCKETS: menu availablilty -> "+menu.restaurant_availability);
+		                        restaurantChooser.addItem(menu.restaurant_name);//add to combo box
 		                    }
-		                    //System.out.println("Success");
+		                    dateSuccess = true;
 		                }else{
-		                    //System.out.println("Failure");
+		                    dateSuccess = false;
 		                }
 		            }
 		        }).send();
-
-				//request menu for the selected date
-				restaurantChooser.setVisible(true);
-				//add restaurants to cb
+		        
+		        if (dateSuccess) {
+					restaurantChooser.setVisible(true);
+		        }
+		        else {
+		        	//popup
+		        }
 				
 			}
 		});
 		
 		restaurantChooser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Restaurant curr = (Restaurant)restaurantChooser.getSelectedItem();
-				//request items for the select restaurant
-				
-				
+				String curr = (String)restaurantChooser.getSelectedItem();
+				for (Menu menu : menus){
+					if (menu.restaurant_name = restaurantChooser.getSelectedItem()) {
+						for (Menu.Meal m : menu.meals) {
+							foodChooser.addItem("--" + m.meal_name + "--");
+							for (Menu.MealSections s : m.meal_sections) {
+								foodChooser.addItem("-" + s.section_name + "-");
+								for (Menu.FoodItem f : s.section_items) {
+									foodChooser.addItem(f);
+								}
+							}
+							
+						}
+					}
+                }
 			}
 		});
 		
