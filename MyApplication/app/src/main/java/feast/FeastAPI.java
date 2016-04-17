@@ -18,7 +18,9 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import feast.parsers.FoodItemParser;
@@ -39,9 +41,9 @@ public class FeastAPI
         public void fetchedFavorites(Set<FoodItem> favorites, VolleyError error);
     }
 
-    public interface MenusCallback
+    public interface MenusCallback//EVK, Parkside, Cafe84
     {
-        public void fetchedMenus(Set<Menu> menus, VolleyError error);
+        public void fetchedMenus(Map<Integer, Menu> menus, VolleyError error);
     }
 
     public void setContext(Context context)
@@ -120,7 +122,7 @@ public class FeastAPI
             public void onResponse(JSONArray response) {
                 MenuParser parser = new MenuParser();
 
-                Set<Menu> menus = new HashSet<Menu>();
+                HashMap<Integer, Menu> menus = new HashMap<Integer, Menu>();
 
                 for (int i = 0; i < response.length(); i++)
                 {
@@ -129,7 +131,21 @@ public class FeastAPI
                         JSONObject object = response.getJSONObject(i);
 
                         Menu menu = parser.parsedMenuFromJSON(object);
-                        menus.add(menu);
+
+                        String restaurantName = object.getString("restaurant_name");
+
+                        if (restaurantName.equals("EVK"))
+                        {
+                            menus.put(new Integer(0), menu);
+                        }
+                        else if (restaurantName.equals("Parkside"))
+                        {
+                            menus.put(new Integer(1), menu);
+                        }
+                        else if (restaurantName.equals("Cafe 84"))
+                        {
+                            menus.put(new Integer(2), menu);
+                        }
                     }
                     catch (JSONException e)
                     {

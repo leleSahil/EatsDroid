@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import feast.FeastAPI;
@@ -52,7 +53,7 @@ public class RestaurantFragment extends Fragment {
 //    MealRecyclerViewAdapter mealRecyclerViewAdapter;
 
     String diningHallID;
-    Set<feast.Menu> menuSet;
+    Map<Integer, Menu> menus;
 
     ArrayList<ListItemParent> listItems;
     MyListAdapter myListAdapter;
@@ -130,7 +131,7 @@ public class RestaurantFragment extends Fragment {
 
         this.fetchDataForDate(date);
 
-        return populateListView(view, menuSet);
+        return populateListView(view, menus);
     }
 
     private void fetchDataForDate(Date date)
@@ -139,11 +140,11 @@ public class RestaurantFragment extends Fragment {
 
         FeastAPI.sharedAPI.fetchMenusForDateWithCompletion(date, new FeastAPI.MenusCallback() {
             @Override
-            public void fetchedMenus(Set<feast.Menu> menus, VolleyError error) {
+            public void fetchedMenus(Map<Integer, Menu> menus, VolleyError error) {
                 if(error == null) {
 
                     fetchedMenus = true;
-                    menuSet = menus;
+                    RestaurantFragment.this.menus = menus;
 
                     Log.w("Riley", menus.toString());
 
@@ -152,7 +153,7 @@ public class RestaurantFragment extends Fragment {
                         // recreate ArrayList<ListItemParent> listItems
                         // notifyDataSetChanged()
                         listItems.clear();
-                        updateListItems(menuSet.iterator().next());
+                        updateListItems(menus.get(new Integer(0)));
                         myListAdapter.notifyDataSetChanged();
                     }
 
@@ -180,7 +181,7 @@ public class RestaurantFragment extends Fragment {
                             // recreate ArrayList<ListItemParent> listItems
                             // notifyDataSetChanged()
                             listItems.clear();
-                            updateListItems(menuSet.iterator().next());
+                            updateListItems(menus.get(new Integer(0)));
                             myListAdapter.notifyDataSetChanged();
                         }
                     }
@@ -190,7 +191,7 @@ public class RestaurantFragment extends Fragment {
     }
 
 
-    private View populateListView(View view, Set<Menu> menuSet) {
+    private View populateListView(View view, Map<Integer, Menu> menus) {
         setUpListView(view);
         return view;
     }
