@@ -9,8 +9,11 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.sun.net.httpserver.HttpExchange;
+import org.bson.BSON;
 import org.bson.Document;
+import org.bson.Transformer;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import java.io.IOException;
 import java.net.URI;
@@ -55,14 +58,29 @@ public class MenuController implements JsonRequestHandlerInterface {
 //
 //            System.out.println(c);
 //            System.out.println(c.getTime());
-            java.util.Date date = new DateTime( dateElements[0]+"-"+dateElements[1]+"-"+dateElements[2]+"T00:00:00Z" ).toDate();
+            BSON.addEncodingHook(DateTime.class, new Transformer() {
+                @Override
+                public Object transform(final Object o) {
+                    return new Date(((DateTime) o).getMillis());
+                }
+            });
+            // Add hook to decode java.util.Date as a Joda DateTime
+            BSON.addDecodingHook(Date.class, new Transformer() {
+                @Override
+                public Object transform(final Object o) {
+                    return new DateTime(((Date) o).getTime());
+                }
+            });
+
+            DateTime date = new DateTime( dateElements[0]+"-"+dateElements[1]+"-"+dateElements[2]+"T00:00:00Z" );
             System.out.println(date);
+            System.out.println( DateTimeZone.getDefault() );
             return new ResponseTuple(200, getMenus(date));
         }
         return NotFoundRequestHandler.throw404(t);
 
     }
-    public String getMenus(Date date){
+    public String getMenus(DateTime date){
         MongoCollection<Document> collection = DatabaseSingleton.getInstance().database.getCollection("menus");
 
         BasicDBObject query = new BasicDBObject();

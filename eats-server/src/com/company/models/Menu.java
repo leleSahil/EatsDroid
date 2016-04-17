@@ -26,6 +26,7 @@ public class Menu implements Serializable {
     public String restaurant_availability;
     @Reference
     public ObjectId restaurant_id;
+    public String restaurant_name;
 
     public Menu(ObjectId _id, List<Meal> meals, Date date, String restaurant_availability, ObjectId restaurant_id) {
         this._id = _id;
