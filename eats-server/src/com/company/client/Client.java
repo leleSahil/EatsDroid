@@ -39,9 +39,11 @@ public class Client implements Runnable{
       } catch (IOException e) {
          e.printStackTrace();
          this.respCallback.callback(null);
+         System.out.println("test1");
       } catch (ClassNotFoundException e) {
          e.printStackTrace();
          this.respCallback.callback(null);
+         System.out.println("test2");
       }
       new Thread(this.respCallback).start();
    }

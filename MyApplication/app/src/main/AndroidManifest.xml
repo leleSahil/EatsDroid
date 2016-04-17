@@ -22,7 +22,7 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login">
+            android:label="Eats4Droid">
 
             <!-- just move this around to the activity -->
             <intent-filter>

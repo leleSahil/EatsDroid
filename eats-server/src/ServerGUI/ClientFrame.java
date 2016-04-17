@@ -23,11 +23,15 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -39,6 +43,7 @@ import javax.swing.UIManager;
 import com.company.client.Client;
 import com.company.client.ResponseInterface;
 import com.company.models.Menu.FoodItem;
+import com.company.models.Menu;
 import com.company.models.Restaurant;
 import com.company.sockets.AuthenticationChecker;
 import com.company.sockets.Request;
@@ -49,13 +54,16 @@ public class ClientFrame extends JFrame {
 	private static String configFile = "ClientConfig.txt";
 	
 	ClientFrame cf;
+	private Request.RequestAuthentication auth;
 	
 	private JPanel buttons;
 	private JButton login;
 	private JButton guest;
 	
 	private JPanel loginFields;
+	private JLabel userLabel;
 	private JTextField loginUser;
+	private JLabel passLabel;
 	private JTextField loginPass;
 	
 	private JButton send;
@@ -71,6 +79,8 @@ public class ClientFrame extends JFrame {
 	private JButton removeButton;
 	private JButton addButton;
 	private JPanel buttonPanel;
+	
+	private boolean loginSuccess = false;
 	
 	public ClientFrame()
 	{
@@ -89,6 +99,8 @@ public class ClientFrame extends JFrame {
 	}
 	
 	private void initializeVariables() {
+		userLabel = new JLabel("Username");
+		passLabel = new JLabel("Password");
 		login = new JButton("Admin Login");
 		guest = new JButton("Guest");
 		buttons = new JPanel();
@@ -115,7 +127,9 @@ public class ClientFrame extends JFrame {
 
 	
 	private void createGUI() {
+		//buttons.add(userLabel);
 		buttons.add(login);
+		//buttons.add(passLabel);
 		buttons.add(guest);
 		add(buttons);
 		
@@ -158,10 +172,10 @@ public class ClientFrame extends JFrame {
 						Socket s = null;
 						BufferedReader in = null;
 						try {
-							in = new BufferedReader(new FileReader(configFile));
+							/*in = new BufferedReader(new FileReader(configFile));
 							String temp = in.readLine();
 							int port = Integer.parseInt(temp);
-							temp = in.readLine();
+							temp = in.readLine();*/
 							//s = new Socket(temp, port);
 							
 							//oos = new ObjectOutputStream(s.getOutputStream());
@@ -170,10 +184,11 @@ public class ClientFrame extends JFrame {
 							//c.user = loginUser.getText();
 							//c.pass = (Integer.toString(loginPass.getText().hashCode()));
 							
-							Request.RequestAuthentication auth = new Request.RequestAuthentication(loginUser.getText(), AuthenticationChecker.hash(loginPass.getText()));
+							auth = new Request.RequestAuthentication(loginUser.getText(), AuthenticationChecker.hash(loginPass.getText()));
 
-							Request request = new Request(null, auth);
-							boolean success = true;
+
+					        // Login request
+					        Request request = new Request(null, new Request.RequestCheckAuthentication(loginUser.getText(), AuthenticationChecker.hash(loginPass.getText())));
 							new Client(request, new ResponseInterface() {
 
 					            Response resp;
@@ -186,17 +201,16 @@ public class ClientFrame extends JFrame {
 					            public void run() {
 					                System.out.println("SOCKETS: Callback called");
 					                if(this.resp != null && this.resp.requestSuccess){
-					                	System.out.println("Success");
-					                	//dont know best way to send this up to the clientframe
+					                	cf.loginSuccess = true;
 					                }else{
-					                    System.out.println("Failure");
+					                	cf.loginSuccess = false;
 					                }
 
 					            }
 					        }).send();
 							//(Boolean)ois.readObject();
 							//System.out.println(success);
-							if (success) {
+							if (loginSuccess) {
 								cf.remove(loginFields);
 								cf.remove(buttons);
 								//cf.getContentPane().setLayout(mgr);
@@ -221,6 +235,7 @@ public class ClientFrame extends JFrame {
 									"Server could not be reached",
 									"Connection Failed",
 									JOptionPane.INFORMATION_MESSAGE);
+							ioe.printStackTrace();
 						/*} catch (ClassNotFoundException cnfe) {
 							cnfe.printStackTrace();*/
 						} finally {
@@ -260,15 +275,51 @@ public class ClientFrame extends JFrame {
 		dateChooser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				UIDate curr = (UIDate) dateChooser.getSelectedItem();
+				
+				Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"), Locale.US);
+				c.setTime(curr.getDate());
+		        c.set(Calendar.HOUR, 0);
+		        c.set(Calendar.MINUTE, 0);
+		        c.set(Calendar.SECOND, 0);
+		        c.set(Calendar.MILLISECOND, 0);
+		        
+		        //impossible to arrive here without auth already being set
+				Request request = new Request(auth, new Request.RequestPullMenus(c));
+		        new Client(request, new ResponseInterface() {
+
+		            Response resp;
+		            @Override
+		            public void callback(Response resp) {
+		                this.resp = resp;
+		            }
+
+		            @Override
+		            public void run() {
+		                System.out.println("SOCKETS: Callback called");
+		                if(this.resp != null && this.resp.requestSuccess){
+		                    List<Menu> menus = (List<Menu>)this.resp.data;
+		                    for(Menu menu : menus){
+		                        System.out.println("SOCKETS: menu availablilty -> "+menu.restaurant_availability);
+		                    }
+		                    //System.out.println("Success");
+		                }else{
+		                    //System.out.println("Failure");
+		                }
+		            }
+		        }).send();
+
 				//request menu for the selected date
+				restaurantChooser.setVisible(true);
+				//add restaurants to cb
 				
 			}
 		});
 		
 		restaurantChooser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//Restaurant curr = (Restaurant)restaurantChooser.getSelectedItem();
-				//request menu for the selected date
+				Restaurant curr = (Restaurant)restaurantChooser.getSelectedItem();
+				//request items for the select restaurant
+				
 				
 			}
 		});

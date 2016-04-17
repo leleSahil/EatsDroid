@@ -2,27 +2,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/splash"
     android:orientation="vertical"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity"
+    android:weightSum="1">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textSize="25sp"
         android:text="Eats4Droid" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:id="@+id/auth"
-        android:text="Sign in with Google" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:id="@+id/guest"
-        android:onClick="sendMessage"
-        android:text="Use as a guest user" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,4 +23,38 @@
         android:layout_gravity="center"
         android:textSize="10sp"/>
 
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:gravity="center|bottom"
+        android:orientation="vertical" >
+
+        <Button
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textColor="#f0e6e6"
+            android:id="@+id/auth"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal|center"
+            android:background="@drawable/button"
+            android:text="Sign in with Google" />
+
+        <Button
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:textColor="#f0e6e6"
+            android:id="@+id/guest"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="275dp"
+            android:layout_gravity="center_horizontal|center"
+            android:onClick="sendMessage"
+            android:background="@drawable/button"
+            android:text="Use as a guest user" />
+
+    </LinearLayout>
+
+    <!--android:layout_gravity="center_horizontal"-->
 </LinearLayout>
