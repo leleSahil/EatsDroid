@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.Toast;
 
 //import com.example.sahil.myapplication.FeastObjects.FeastObjects.FoodItem;
 //import com.example.sahil.myapplication.FeastObjects.FeastObjects.Meal;
@@ -158,7 +159,11 @@ public class RestaurantFragment extends Fragment {
                     }
 
 
-                } else {
+                } else
+                {
+                    Toast toast = Toast.makeText(EatsApplication.applicationContext, "Failed to fetch menu data.", Toast.LENGTH_LONG);
+                    toast.show();
+
                     // TODO alert the user that there was an error refreshing
                     Log.w("Sahil", "Error getting data: " + error.toString());
                 }
