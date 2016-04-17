@@ -42,11 +42,6 @@ public class MenuController implements JsonRequestHandlerInterface {
             c.set(Calendar.SECOND, 0);
             c.set(Calendar.MILLISECOND, 0);
 
-//            Date ltDate = new Date(Integer.parseInt(dateElements[0]), Integer.parseInt(dateElements[1]), Integer.parseInt(dateElements[2])+2, 0, 0, 0);
-//            Date gtDate = new Date(Integer.parseInt(dateElements[0]), Integer.parseInt(dateElements[1]), Integer.parseInt(dateElements[2])-1, 0, 0, 0);
-//            System.out.println(ltDate.getTime());
-//            System.out.println(gtDate.getTime());
-
             System.out.println(c.getTime());
             return new ResponseTuple(200, getMenus(c.getTime()));
         }

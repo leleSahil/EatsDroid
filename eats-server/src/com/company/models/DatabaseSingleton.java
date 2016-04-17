@@ -18,6 +18,10 @@ public class DatabaseSingleton {
             database = mongoClient.getDatabase(Constants.MONGO_DB);
         }
 
+        public MongoClient getClient(){
+            return this.mongoClient;
+        }
+
         public static DatabaseSingleton getInstance() {
             if(instance == null) {
                 instance = new DatabaseSingleton();

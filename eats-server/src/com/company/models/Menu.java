@@ -9,6 +9,7 @@ import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Reference;
 import org.mongodb.morphia.query.Query;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -16,15 +17,15 @@ import java.util.List;
  * Created by brian on 4/15/16.
  */
 @Entity("menus")
-public class Menu {
+public class Menu implements Serializable {
 
     @Id
-    ObjectId _id;
-    List<Meal> meals;
-    Date date;
-    String restaurant_availability;
+    public ObjectId _id;
+    public List<Meal> meals;
+    public Date date;
+    public String restaurant_availability;
     @Reference
-    ObjectId restaurant_id;
+    public ObjectId restaurant_id;
 
     public Menu(ObjectId _id, List<Meal> meals, Date date, String restaurant_availability, ObjectId restaurant_id) {
         this._id = _id;
@@ -36,7 +37,7 @@ public class Menu {
 
     public Menu(){}
 
-    public static class Meal {
+    public static class Meal implements Serializable{
         public Meal() {}
 
         public Meal(Date meal_end_time, Date meal_begin_time, String meal_availablity, String meal_identifier, String meal_name, List<MealSections> meal_sections) {
@@ -48,15 +49,15 @@ public class Menu {
             this.meal_sections = meal_sections;
         }
 
-        Date meal_end_time;
-        Date meal_begin_time;
-        String meal_availablity; // "open" or "closed"
-        String meal_identifier; // "breakfast", "lunch"
-        String meal_name; // "Breakfast"
-        List<MealSections> meal_sections;
+        public Date meal_end_time;
+        public Date meal_begin_time;
+        public String meal_availablity; // "open" or "closed"
+        public String meal_identifier; // "breakfast", "lunch"
+        public String meal_name; // "Breakfast"
+        public List<MealSections> meal_sections;
     }
 
-    public static class MealSections{
+    public static class MealSections implements Serializable{
         public MealSections(){}
 
         public MealSections(String section_identifier, String section_name, List<FoodItem> section_items) {
@@ -65,16 +66,16 @@ public class Menu {
             this.section_items = section_items;
         }
 
-        String section_identifier;
-        String section_name;
-        List<FoodItem> section_items;
+        public String section_identifier;
+        public String section_name;
+        public List<FoodItem> section_items;
     }
 
-    public static class FoodItem {
+    public static class FoodItem implements Serializable{
         public FoodItem(){}
 
-        String food_identifier;
-        String food_name;
+        public String food_identifier;
+        public String food_name;
 
         public FoodItem(String food_identifier, String food_name) {
             this.food_identifier = food_identifier;
