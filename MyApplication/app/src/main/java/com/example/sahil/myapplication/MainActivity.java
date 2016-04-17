@@ -64,9 +64,14 @@ public class MainActivity extends AppCompatActivity {
         if(year_x==-1 || month_x==-1 || day_x==-1) {
             year_x = CalendarUtils.getYear();
             month_x = CalendarUtils.getMonth();
-            day_x = CalendarUtils.getDay()+1;
+            day_x = CalendarUtils.getDay();
         }
+
+////        Date date = new Date();
+//        Calendar calendar.getInstance
+//        RestaurantFragment.setDates(date.getYear(), date.getMonth(), date.getDay());
         RestaurantFragment.setDates(year_x, month_x, day_x);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -131,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
             // Do something with the date chosen by the user
 
             year_x = year;
-            month_x = month;
+            month_x = month + 1;
             day_x = day;
 
             // TODO alert the Restaurant Fragment that the date has changed
