@@ -186,6 +186,9 @@ public class MainActivity extends AppCompatActivity {
 //            restaurantFragment.setArguments(args);
 //            Log.w("Sahil", "Log tags working");
 //            return PlaceholderFragment.newInstance(position + 1);
+
+            // put into the bundle the id (the position) of the restaurant that we want
+
             return restaurantFragment;
         }
 
