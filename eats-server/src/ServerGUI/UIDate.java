@@ -14,4 +14,8 @@ public class UIDate{
 	public String toString() {
 		return sdf.format(d);
 	}
+	
+	public Date getDate() {
+		return d;
+	}
 }

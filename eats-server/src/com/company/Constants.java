@@ -10,5 +10,5 @@ public class Constants {
     public static final String MONGO_DB = "eatseve";
 
     public static final Integer SOCKET_PORT = 8001;
-    public static final String SOCKET_HOST = "localhost";
+    public static final String SOCKET_HOST = "159.203.216.246";
 }
