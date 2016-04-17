@@ -3,6 +3,7 @@ package com.example.sahil.myapplication;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.design.widget.TabLayout;
@@ -102,9 +103,11 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            getFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, new SettingsFragment())
-                    .commit();
+//            getFragmentManager().beginTransaction()
+//                    .replace(android.R.id.content, new SettingsFragment())
+//                    .commit();
+            Intent intent = new Intent(getApplicationContext(), FavoriteActivity.class);
+            startActivity(intent);
         } else if(id == R.id.action_calendar) {
             DialogFragment newFragment = new DatePickerFragment();
             newFragment.show(getFragmentManager(), "MyDialog");
@@ -214,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             RestaurantFragment restaurantFragment = new RestaurantFragment();
-//            Bundle args = new Bundle();
+            Bundle args = new Bundle();
 //
 //            // may want to put something about what the date is
 //
@@ -223,6 +226,8 @@ public class MainActivity extends AppCompatActivity {
 //            return PlaceholderFragment.newInstance(position + 1);
 
             // TODO put into the bundle the id (the position) of the restaurant that we want
+            args.putInt("DiningHallID", position);
+            restaurantFragment.setArguments(args);
 
             return restaurantFragment;
         }

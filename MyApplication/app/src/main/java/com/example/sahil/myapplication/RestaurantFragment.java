@@ -52,7 +52,7 @@ public class RestaurantFragment extends Fragment {
 //    RecyclerView recyclerView;
 //    MealRecyclerViewAdapter mealRecyclerViewAdapter;
 
-    String diningHallID;
+    int diningHallID;
     Map<Integer, Menu> menus;
 
     ArrayList<ListItemParent> listItems;
@@ -75,9 +75,17 @@ public class RestaurantFragment extends Fragment {
 //            month = CalendarUtils.getMonth();
 //            day = CalendarUtils.getDay(); // + 1
 //        }
+
     }
 
-//    @Override
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        diningHallID = getArguments().getInt("DiningHallID");
+        //Log.w("Sahil", "dining hall id is: " + diningHallID);
+    }
+
+    //    @Override
 //    public void onCreate(@Nullable Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
 //
@@ -152,9 +160,12 @@ public class RestaurantFragment extends Fragment {
 
                         // recreate ArrayList<ListItemParent> listItems
                         // notifyDataSetChanged()
-                        listItems.clear();
-                        updateListItems(menus.get(new Integer(0)));
-                        myListAdapter.notifyDataSetChanged();
+                        if(!menus.isEmpty()) {
+                            listItems.clear();
+                            // TODO check that a menu for that diningHallID actually exists
+                            updateListItems(menus.get(new Integer(diningHallID)));
+                            myListAdapter.notifyDataSetChanged();
+                        }
                     }
 
 
