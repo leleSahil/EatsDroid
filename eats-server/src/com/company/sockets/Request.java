@@ -68,6 +68,9 @@ public class Request implements Serializable{
 
     // Pragma: Request
     public static class RequestPullMenus implements Serializable{
+        public RequestPullMenus(Calendar date) {
+            this.date = date;
+        }
         Calendar date;
     }
 
