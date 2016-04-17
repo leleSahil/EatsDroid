@@ -51,13 +51,62 @@ public class FeastAPI
 
     public static FeastAPI sharedAPI = new FeastAPI();
 
-    private String userIdentifier = "5711c2931a95609d06ed8125";
+    private String userIdentifier = null;
     private String baseURL = "http://159.203.216.246:8000";
     private RequestQueue requestQueue;
 
     private FeastAPI()
     {
 
+    }
+
+    public Boolean isUserAuthorized()
+    {
+        return this.userIdentifier != null;
+    }
+
+    public void authorizeUserWithOAuthToken(String oauthToken, final RequestCallback callback)
+    {
+        String href = this.baseURL + "/authorize";
+
+        JSONObject object = null;
+
+        try
+        {
+            object = new JSONObject();
+            object.put("oauth_token", oauthToken);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, href, object, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+
+                VolleyError error = null;
+
+                try
+                {
+                    FeastAPI.this.userIdentifier = response.getString("user_id");
+                }
+                catch (JSONException exception)
+                {
+                    exception.getMessage();
+                    error = new VolleyError(new String("Failed to authorize user"));
+                }
+
+                callback.requestFinishedWithSuccess(FeastAPI.this.userIdentifier != null, error);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.requestFinishedWithSuccess(false, error);
+            }
+        });
+
+        this.requestQueue.add(request);
     }
 
     public void fetchMenusForDateWithCompletion(Date date, final MenusCallback callback)
