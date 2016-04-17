@@ -130,8 +130,8 @@ public class RestaurantFragment extends Fragment {
         Date date = null;
         try
         {
-            date = dateFormat.parse("2016/04/17");
-//            date = dateFormat.parse(year + "/" + month + "/" + day); TODO commment this back in, some problem with today's menu
+//            date = dateFormat.parse("2016/04/18");
+            date = dateFormat.parse(year + "/" + month + "/" + day); //TODO commment this back in, some problem with today's menu
         }
         catch (Exception e)
         {
@@ -197,7 +197,7 @@ public class RestaurantFragment extends Fragment {
                             // recreate ArrayList<ListItemParent> listItems
                             // notifyDataSetChanged()
                             listItems.clear();
-                            updateListItems(menus.get(new Integer(0)));
+                            updateListItems(menus.get(new Integer(diningHallID)));
                             myListAdapter.notifyDataSetChanged();
                         }
                     }
@@ -213,6 +213,7 @@ public class RestaurantFragment extends Fragment {
     }
 
     private void updateListItems(Menu selectedMenu) {
+        
         for(Meal currentMeal: selectedMenu.getMeals()) { // int i=0; i < mealsOfDay.size(); i++
             // for each Meal - make one header add it to a vector of custom parent type
             // for each section - make a add it to a vector of custom parent type

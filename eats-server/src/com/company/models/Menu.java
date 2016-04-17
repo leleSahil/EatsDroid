@@ -26,6 +26,7 @@ public class Menu implements Serializable {
     public String restaurant_availability;
     @Reference
     public ObjectId restaurant_id;
+    public String restaurant_name;
 
     public Menu(ObjectId _id, List<Meal> meals, Date date, String restaurant_availability, ObjectId restaurant_id) {
         this._id = _id;
@@ -55,6 +56,10 @@ public class Menu implements Serializable {
         public String meal_identifier; // "breakfast", "lunch"
         public String meal_name; // "Breakfast"
         public List<MealSections> meal_sections;
+        
+        public String toString() {
+        	return meal_name;
+        }
     }
 
     public static class MealSections implements Serializable{
@@ -69,6 +74,10 @@ public class Menu implements Serializable {
         public String section_identifier;
         public String section_name;
         public List<FoodItem> section_items;
+        
+        public String toString() {
+        	return section_name;
+        }
     }
 
     public static class FoodItem implements Serializable{
@@ -80,6 +89,10 @@ public class Menu implements Serializable {
         public FoodItem(String food_identifier, String food_name) {
             this.food_identifier = food_identifier;
             this.food_name = food_name;
+        }
+        
+        public String toString() {
+        	return food_name;
         }
     }
 
@@ -107,7 +120,10 @@ public class Menu implements Serializable {
             System.out.println(menu.restaurant_availability);
         }
     }
-
+    
+    public String toString() {
+    	return restaurant_name;
+    }
 }
 
 
