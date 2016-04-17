@@ -23,10 +23,13 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.example.sahil.myapplication.FeastObjects.FeastObjects.Restaurant;
+import com.example.sahil.myapplication.Utils.CalendarUtils;
 import com.example.sahil.myapplication.Utils.Constants;
 
 import java.util.Calendar;
 import java.util.Date;
+
+import butterknife.Bind;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -44,12 +47,26 @@ public class MainActivity extends AppCompatActivity {
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
+    @Bind(R.id.view_pager) ViewPager mViewPager;
+
+
+    public static int day_x=-1;
+    public static int month_x=-1;
+    public static int year_x=-1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+
+
+        if(year_x==-1 || month_x==-1 || day_x==-1) {
+            year_x = CalendarUtils.getYear();
+            month_x = CalendarUtils.getMonth();
+            day_x = CalendarUtils.getDay()+1;
+        }
+        RestaurantFragment.setDates(year_x, month_x, day_x);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -58,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -95,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static class DatePickerFragment extends DialogFragment
+    public class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
 
         @Override
@@ -112,7 +129,25 @@ public class MainActivity extends AppCompatActivity {
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             // Do something with the date chosen by the user
+
+            year_x = year;
+            month_x = month;
+            day_x = day;
+
+            // TODO alert the Restaurant Fragment that the date has changed
+
+            RestaurantFragment.setDates(year_x, month_x, day_x);
+
             Log.w("Sahil", year + "-" + month + "-" + day);
+
+            String name = getFragmentTag(mViewPager.getId(), mViewPager.getCurrentItem());
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(name);
+            ((RestaurantFragment)fragment).refreshMenus();
+        }
+
+        private String getFragmentTag(int viewPagerId, int fragmentPosition)
+        {
+            return "android:switcher:" + viewPagerId + ":" + fragmentPosition;
         }
     }
 
@@ -180,14 +215,13 @@ public class MainActivity extends AppCompatActivity {
             RestaurantFragment restaurantFragment = new RestaurantFragment();
 //            Bundle args = new Bundle();
 //
-//            args.putString(Constants.DINING_HALL_ID, DBWrapper.getRestaurants(new Date()).get(position).getID());
 //            // may want to put something about what the date is
 //
 //            restaurantFragment.setArguments(args);
 //            Log.w("Sahil", "Log tags working");
 //            return PlaceholderFragment.newInstance(position + 1);
 
-            // put into the bundle the id (the position) of the restaurant that we want
+            // TODO put into the bundle the id (the position) of the restaurant that we want
 
             return restaurantFragment;
         }
@@ -201,17 +235,19 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
 
-            return DBWrapper.getRestaurants(new Date()).get(position).getName();
-//            switch(position) {
-//                case 0:
-//                    return "EVK";
-//                case 1:
-//                    return "Parkside";
-//                case 2:
-//                    return "Cafe 84";
-//                default:
-//                    return "";
-//            }
+
+
+            // TODO change this to get the actual names
+            switch(position) {
+                case 0:
+                    return "EVK";
+                case 1:
+                    return "Parkside";
+                case 2:
+                    return "Cafe 84";
+                default:
+                    return "";
+            }
         }
     }
 }

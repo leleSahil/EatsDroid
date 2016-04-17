@@ -1,15 +1,22 @@
 package com.example.sahil.myapplication;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.ListView;
 
 //import com.example.sahil.myapplication.FeastObjects.FeastObjects.FoodItem;
@@ -18,9 +25,14 @@ import android.widget.ListView;
 //import com.example.sahil.myapplication.FeastObjects.FeastObjects.Restaurant;
 //import com.example.sahil.myapplication.FeastObjects.FeastObjects.Section;
 
+import com.android.volley.VolleyError;
+import com.example.sahil.myapplication.Utils.CalendarUtils;
+
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -48,10 +60,38 @@ public class RestaurantFragment extends Fragment {
 
     private static final int CONTENT_VIEW_ID = 10101010; // have to set this for programmatically adding FragmentViews?
 
+    private static int year = -1, month = -1, day = -1;
+
     public RestaurantFragment() {
 //        this.restaurant = restaurant;
         initializeListItems();
+//        if(year== -1 || month== -1 || day == -1) {
+//            year = CalendarUtils.getYear();
+//            month = CalendarUtils.getMonth();
+//            day = CalendarUtils.getDay(); // + 1
+//        }
     }
+
+//    @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//
+//        // TODO get the id of the restaurant desired from the bundle
+//        setHasOptionsMenu(true);
+//    }
+//
+//    @Override
+//    public void onCreateOptionsMenu(android.view.Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.restaurant_fragment_menu, menu);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        if(item.getI == R.id.action_calendar) {
+//            DialogFragment newFragment = new DatePickerFragment();
+//            newFragment.show(getFragmentManager(), "MyDialog");
+//        }
+//    }
 
     private void initializeListItems() {
         // create one meal
@@ -76,7 +116,8 @@ public class RestaurantFragment extends Fragment {
         Date date = null;
         try
         {
-            date = dateFormat.parse("2016/04/15");
+            date = dateFormat.parse("2016/04/17");
+//            date = dateFormat.parse(year + "/" + month + "/" + year);
             Log.w("Sahil", "date is " + date);
         }
         catch (Exception e)
@@ -85,14 +126,19 @@ public class RestaurantFragment extends Fragment {
         }
         FeastAPI.sharedAPI.fetchMenusForDateWithCompletion(date, new FeastAPI.MenusCallback() {
             @Override
-            public void fetchedMenus(Set<feast.Menu> menus) {
-                Log.w("Riley", menus.toString());
-                menuSet = menus;
-                // recreate ArrayList<ListItemParent> listItems
-                // notifyDataSetChanged()
-                listItems.clear();
-                updateListItems(menuSet.iterator().next());
-                myListAdapter.notifyDataSetChanged();
+            public void fetchedMenus(Set<feast.Menu> menus, VolleyError error) {
+                if(error == null) {
+                    Log.w("Riley", menus.toString());
+                    menuSet = menus;
+                    // recreate ArrayList<ListItemParent> listItems
+                    // notifyDataSetChanged()
+                    listItems.clear();
+                    updateListItems(menuSet.iterator().next());
+                    myListAdapter.notifyDataSetChanged();
+                } else {
+                    // TODO alert the user that there was an error refreshing
+                    Log.w("Sahil", "Error getting data: " + error.toString());
+                }
             }
         });
         return populateListView(view, menuSet);
@@ -142,6 +188,51 @@ public class RestaurantFragment extends Fragment {
         myListAdapter = new MyListAdapter(getContext(), R.id.mealListView, listItems);
         ListView mealListView= (ListView) view.findViewById(R.id.mealListView);
         mealListView.setAdapter(myListAdapter);
+    }
+
+    public static void setDates(int year_x, int month_x, int day_x) {
+        year = year_x;
+        month = month_x;
+        day = day_x;
+
+        Log.w("Sahil", "Date set to " + year + "-" +  month + "-" + day);
+    }
+
+//    public void blah() {
+//        Log.w("Sahil", "blah");
+//    }
+
+
+    public void refreshMenus() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = null;
+        try
+        {
+//            date = dateFormat.parse("2016/04/17");
+            date = dateFormat.parse(year + "/" + month + "/" + year);
+//            date = new Date(year, month, day);
+            Log.w("Sahil", "date from refresh menus is " + date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        FeastAPI.sharedAPI.fetchMenusForDateWithCompletion(date, new FeastAPI.MenusCallback() {
+            @Override
+            public void fetchedMenus(Set<feast.Menu> menus, VolleyError error) {
+                if(error == null) {
+                    Log.w("Riley", menus.toString());
+                    menuSet = menus;
+                    // recreate ArrayList<ListItemParent> listItems
+                    // notifyDataSetChanged()
+                    listItems.clear();
+                    updateListItems(menuSet.iterator().next());
+                    myListAdapter.notifyDataSetChanged();
+                } else {
+                    // TODO alert the user that there was an error refreshing
+                    Log.w("Sahil", "Error getting data: " + error.toString());
+                }
+            }
+        });
     }
 }
 
