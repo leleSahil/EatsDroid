@@ -80,7 +80,8 @@ public class MyListAdapter extends ArrayAdapter<ListItemParent> {
                 } else if (currentItem.getFoodItem().getDietType() == FoodItem.Type.VEGETARIAN) {
                     imageView.setImageResource(R.drawable.iconvegetarian);
                 } else {
-                    imageView.setVisibility(View.GONE);
+                    //imageView.setVisibility(View.GONE);
+                    imageView.setImageResource(R.drawable.invis);
                 }
 
                 CheckBox checkBox = (CheckBox)view.findViewById(R.id.checkbox);
