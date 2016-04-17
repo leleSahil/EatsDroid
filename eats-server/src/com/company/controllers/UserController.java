@@ -6,7 +6,6 @@ import com.company.server.NotFoundRequestHandler;
 import com.company.server.ResponseTuple;
 import com.company.server.Serializer;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -68,40 +67,21 @@ public class UserController implements JsonRequestHandlerInterface {
                     String favoritesForUser = new UserDatabaseAbstraction().getFavoritesForUser(userId);
                     return new ResponseTuple(200, favoritesForUser);
                 }else if(t.getRequestMethod().equals("POST")){
-//                    JSONObject json = (JSONObject) JSONSerializer.toJSON( t.getRequestBody() );
                     System.out.println("This is a post request");
                     JsonParser parser = new JsonParser();
                     System.out.println(t.getRequestBody().toString());
                     Scanner s = new Scanner(t.getRequestBody()).useDelimiter("\\A");
                     String result = s.hasNext() ? s.next() : "";
 
-                    System.out.println(result);
-//                    InputStreamReader reader = new InputStreamReader(t.getRequestBody());
-//                    CharBuffer buff = new CharBuffer();
-//                    StringBuilder builder = new StringBuilder();
-//                    int r = 0;
-//                    while(reader.read()){
-//                        r = reader.
-//                        builder.append(r);
-//                    }
-
-//                    String yo = new String(buff);
-
-
-                    JsonObject yo = (JsonObject) parser.parse(result);
-
                     Gson g = new Gson();
                     FoodObject foodObject = g.fromJson(result, FoodObject.class);
 
 
-//                    Object yo = JSON.parse(t.getRequestBody().toString());
                     if(foodObject == null){
                         System.out.println("fuk");
                     }else{
                         System.out.println("balls");
                     }
-//                    new yo.get("food_identifier")
-//                    System.out.println("I got back  yo: "+ yo.getClass().getName());
 
                     new UserDatabaseAbstraction().addFavorite( foodObject.food_identifier,  foodObject.food_name, userId);
                     return new ResponseTuple(200, "{\"status\":\"success\"}");
@@ -181,7 +161,6 @@ public class UserController implements JsonRequestHandlerInterface {
 
         }
 
-
         public String getFavoritesForUser(String userId) {
             MongoCollection<Document> collection = DatabaseSingleton.getInstance().database.getCollection("users");
             FindIterable<Document> documents = collection.find(new Document("_id", new ObjectId(userId)));
@@ -205,20 +184,6 @@ public class UserController implements JsonRequestHandlerInterface {
         }
 
     }
-
-//    public static <T extends Object> void test(ArrayList<T> list){
-//        if(null!=list && !list.isEmpty())
-//            System.out.println(list.get(0).getClass().getName());
-//    }
-
-    // Routes:
-
-    // users/x/device_token POST (skip for now)
-
-    // users/x/favorites GET, POST
-    // users/x/favorites/<food_identifer> DELETE
-
-
 
 
 }
