@@ -143,7 +143,6 @@ public class Application extends JFrame {
                 }else{
                     JOptionPane.showMessageDialog(null, "Whoops! Login failed.");
                 }
-
             }
         }).send();
     }

@@ -10,10 +10,12 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.sun.net.httpserver.HttpExchange;
 import org.bson.Document;
+import org.joda.time.DateTime;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by brian on 4/15/16.
@@ -33,17 +35,29 @@ public class MenuController implements JsonRequestHandlerInterface {
                 return NotFoundRequestHandler.throw404(t);
             }
 
-            Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"), Locale.US);
-            c.set(Calendar.YEAR, Integer.parseInt(dateElements[0])); // regular year
-            c.set(Calendar.MONTH, Integer.parseInt(dateElements[1])-1); // from 0 - 11
-            c.set(Calendar.DATE, Integer.parseInt(dateElements[2]));  // from 1 - 31..
-            c.set(Calendar.HOUR, 0);
-            c.set(Calendar.MINUTE, 0);
-            c.set(Calendar.SECOND, 0);
-            c.set(Calendar.MILLISECOND, 0);
+//            Calendar c = Calendar.getInstance(TimeZone.getTimeZone("PDT"), Locale.US);
 
-            System.out.println(c.getTime());
-            return new ResponseTuple(200, getMenus(c.getTime()));
+
+//            Calendar c = new GregorianCalendar();
+
+//            c.set(Calendar.YEAR, 2016); // regular year
+//            c.set(Calendar.MONTH, 3); // from 0 - 11
+//            c.set(Calendar.DATE, 20);  // from 1 - 31..
+
+//            c.set(Calendar.YEAR, Integer.parseInt(dateElements[0])); // regular year
+//            c.set(Calendar.MONTH, Integer.parseInt(dateElements[1])-1); // from 0 - 11
+//            c.set(Calendar.DATE, Integer.parseInt(dateElements[2]));  // from 1 - 31..
+//
+//            c.set(Calendar.HOUR, 5);
+//            c.set(Calendar.MINUTE, 0);
+//            c.set(Calendar.SECOND, 0);
+//            c.set(Calendar.MILLISECOND, 0);
+//
+//            System.out.println(c);
+//            System.out.println(c.getTime());
+            java.util.Date date = new DateTime( dateElements[0]+"-"+dateElements[1]+"-"+dateElements[2]+"T00:00:00Z" ).toDate();
+            System.out.println(date);
+            return new ResponseTuple(200, getMenus(date));
         }
         return NotFoundRequestHandler.throw404(t);
 
