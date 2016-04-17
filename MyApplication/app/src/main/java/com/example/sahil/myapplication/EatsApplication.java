@@ -1,6 +1,7 @@
 package com.example.sahil.myapplication;
 
 import android.app.Application;
+import android.content.Context;
 
 import feast.FeastAPI;
 
@@ -9,9 +10,13 @@ import feast.FeastAPI;
  */
 public class EatsApplication extends Application {
 
+    public static Context applicationContext;
+
     public void onCreate()
     {
         super.onCreate();
+
+        applicationContext = getApplicationContext();
 
         FeastAPI.sharedAPI.setContext(getApplicationContext());
     }
