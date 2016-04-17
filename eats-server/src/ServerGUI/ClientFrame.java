@@ -20,7 +20,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.*;
 import java.util.List;
-<<<<<<< HEAD
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -325,11 +324,7 @@ public class ClientFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				String curr = (String)restaurantChooser.getSelectedItem();
 				for (Menu menu : menus){
-<<<<<<< HEAD
-					if (menu.restaurant_name == restaurantChooser.getSelectedItem()) {
-=======
 					if (menu.restaurant_name.equals(restaurantChooser.getSelectedItem())) {
->>>>>>> 836a16133d23b463f8750da1e9da8ab3ae5fe725
 						for (Menu.Meal m : menu.meals) {
 							foodChooser.addItem(m);
 							for (Menu.MealSections s : m.meal_sections) {
