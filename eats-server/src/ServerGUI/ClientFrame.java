@@ -40,6 +40,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import org.bson.types.ObjectId;
+
 import com.company.client.Client;
 import com.company.client.ResponseInterface;
 import com.company.models.Menu.FoodItem;
@@ -74,7 +76,7 @@ public class ClientFrame extends JFrame {
 	boolean showLogin = false;
 	
 	private JComboBox<UIDate> dateChooser;
-	private JComboBox<String> restaurantChooser;
+	private JComboBox<Menu> restaurantChooser;
 	private JComboBox foodChooser;
 	private JButton removeButton;
 	private JButton addButton;
@@ -120,7 +122,7 @@ public class ClientFrame extends JFrame {
 		
 		Calendar t = Calendar.getInstance();
 		t.setTime(today);
-		restaurantChooser = new JComboBox<String>();
+		restaurantChooser = new JComboBox<Menu>();
 		foodChooser = new JComboBox();
 		removeButton = new JButton("Remove selected item");
 		addButton = new JButton("Add an item for the selected date and restaurant");
@@ -303,7 +305,7 @@ public class ClientFrame extends JFrame {
 		                    menus = (List<Menu>)this.resp.data;
 		                    for(Menu menu : menus){
 		                        System.out.println("SOCKETS: menu availablilty -> "+menu.restaurant_availability);
-		                        restaurantChooser.addItem(menu.restaurant_name);//add to combo box
+		                        restaurantChooser.addItem(menu);//add to combo box
 		                    }
 		                    dateSuccess = true;
 		                }else{
@@ -326,11 +328,11 @@ public class ClientFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				String curr = (String)restaurantChooser.getSelectedItem();
 				for (Menu menu : menus){
-					if (menu.restaurant_name = restaurantChooser.getSelectedItem()) {
+					if (menu.restaurant_name == restaurantChooser.getSelectedItem()) {
 						for (Menu.Meal m : menu.meals) {
-							foodChooser.addItem("--" + m.meal_name + "--");
+							foodChooser.addItem(m);
 							for (Menu.MealSections s : m.meal_sections) {
-								foodChooser.addItem("-" + s.section_name + "-");
+								foodChooser.addItem(s);
 								for (Menu.FoodItem f : s.section_items) {
 									foodChooser.addItem(f);
 								}
@@ -345,15 +347,33 @@ public class ClientFrame extends JFrame {
 		removeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				//request menu for the selected date
 				
 			}
 		});
 		
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				//while (currMenu == null && )
+				Request request = new Request(auth, new Request.RequestMenuAdd(((Menu)(restaurantChooser.getSelectedItem()))._id.toString(), "breakfast", "americana", "test_food", "Test FOOD"));
+		        new Client(request, new ResponseInterface() {
+
+		            Response resp;
+		            @Override
+		            public void callback(Response resp) {
+		                this.resp = resp;
+		            }
+
+		            @Override
+		            public void run() {
+		                System.out.println("SOCKETS: Callback called");
+		                if(this.resp != null && this.resp.requestSuccess){
+		                    System.out.println("Success");
+		                }else{
+		                    System.out.println("Failure");
+		                }
+		            }
+		        }).send();
 				
-				//request menu for the selected date
 				
 			}
 		});
