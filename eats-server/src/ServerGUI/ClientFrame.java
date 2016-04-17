@@ -1,28 +1,24 @@
 package ServerGUI;
 
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Point;
-import java.awt.Toolkit;
+import com.company.client.Client;
+import com.company.client.ResponseInterface;
+import com.company.models.Menu;
+import com.company.sockets.AuthenticationChecker;
+import com.company.sockets.Request;
+import com.company.sockets.Response;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Method;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Enumeration;
+import java.util.*;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -39,6 +35,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+
+import org.bson.types.ObjectId;
 
 import com.company.client.Client;
 import com.company.client.ResponseInterface;
@@ -74,13 +72,16 @@ public class ClientFrame extends JFrame {
 	boolean showLogin = false;
 	
 	private JComboBox<UIDate> dateChooser;
-	private JComboBox<Restaurant> restaurantChooser;
-	private JComboBox<FoodItem> foodChooser;
+	private JComboBox<Menu> restaurantChooser;
+	private JComboBox foodChooser;
 	private JButton removeButton;
 	private JButton addButton;
 	private JPanel buttonPanel;
 	
+	List<Menu> menus;
+	
 	private boolean loginSuccess = false;
+	private boolean dateSuccess = false;
 	
 	public ClientFrame()
 	{
@@ -117,8 +118,8 @@ public class ClientFrame extends JFrame {
 		
 		Calendar t = Calendar.getInstance();
 		t.setTime(today);
-		restaurantChooser = new JComboBox<Restaurant>();
-		foodChooser = new JComboBox<FoodItem>();
+		restaurantChooser = new JComboBox<Menu>();
+		foodChooser = new JComboBox();
 		removeButton = new JButton("Remove selected item");
 		addButton = new JButton("Add an item for the selected date and restaurant");
 		buttonPanel = new JPanel();
@@ -147,7 +148,7 @@ public class ClientFrame extends JFrame {
 				loginFields.setMaximumSize(new Dimension(150,100));
 				loginFields.setAlignmentX(CENTER_ALIGNMENT);
 				
-				loginUser = new JTextField("Username");
+				loginUser = new JTextField("admin");
 				loginUser.addMouseListener(new MouseAdapter() {
 					public void mouseClicked(MouseEvent e) {
 						loginUser.setText("");
@@ -156,7 +157,7 @@ public class ClientFrame extends JFrame {
 				loginUser.setAlignmentX(CENTER_ALIGNMENT);
 				loginFields.add(loginUser);
 				
-				loginPass = new JPasswordField("Password");
+				loginPass = new JPasswordField("password");
 				loginPass.addMouseListener(new MouseAdapter() {
 					public void mouseClicked(MouseEvent e) {
 						loginPass.setText("");
@@ -297,45 +298,78 @@ public class ClientFrame extends JFrame {
 		            public void run() {
 		                System.out.println("SOCKETS: Callback called");
 		                if(this.resp != null && this.resp.requestSuccess){
-		                    List<Menu> menus = (List<Menu>)this.resp.data;
+		                    menus = (List<Menu>)this.resp.data;
 		                    for(Menu menu : menus){
 		                        System.out.println("SOCKETS: menu availablilty -> "+menu.restaurant_availability);
+		                        restaurantChooser.addItem(menu);//add to combo box
 		                    }
-		                    //System.out.println("Success");
+		                    dateSuccess = true;
 		                }else{
-		                    //System.out.println("Failure");
+		                    dateSuccess = false;
 		                }
 		            }
 		        }).send();
-
-				//request menu for the selected date
-				restaurantChooser.setVisible(true);
-				//add restaurants to cb
+		        
+		        if (dateSuccess) {
+					restaurantChooser.setVisible(true);
+		        }
+		        else {
+		        	//popup
+		        }
 				
 			}
 		});
 		
 		restaurantChooser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Restaurant curr = (Restaurant)restaurantChooser.getSelectedItem();
-				//request items for the select restaurant
-				
-				
+				String curr = (String)restaurantChooser.getSelectedItem();
+				for (Menu menu : menus){
+					if (menu.restaurant_name.equals(restaurantChooser.getSelectedItem())) {
+						for (Menu.Meal m : menu.meals) {
+							foodChooser.addItem(m);
+							for (Menu.MealSections s : m.meal_sections) {
+								foodChooser.addItem(s);
+								for (Menu.FoodItem f : s.section_items) {
+									foodChooser.addItem(f);
+								}
+							}
+							
+						}
+					}
+                }
 			}
 		});
 		
 		removeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				//request menu for the selected date
 				
 			}
 		});
 		
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				//while (currMenu == null && )
+				Request request = new Request(auth, new Request.RequestMenuAdd(((Menu)(restaurantChooser.getSelectedItem()))._id.toString(), "breakfast", "americana", "test_food", "Test FOOD"));
+		        new Client(request, new ResponseInterface() {
+
+		            Response resp;
+		            @Override
+		            public void callback(Response resp) {
+		                this.resp = resp;
+		            }
+
+		            @Override
+		            public void run() {
+		                System.out.println("SOCKETS: Callback called");
+		                if(this.resp != null && this.resp.requestSuccess){
+		                    System.out.println("Success");
+		                }else{
+		                    System.out.println("Failure");
+		                }
+		            }
+		        }).send();
 				
-				//request menu for the selected date
 				
 			}
 		});
