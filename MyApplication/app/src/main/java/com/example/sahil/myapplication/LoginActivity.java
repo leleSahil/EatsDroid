@@ -203,7 +203,7 @@ public class LoginActivity extends Activity {
                     Log.d("Refresh", refresh);
                     Log.d("Cherrie", "Before Feast API call");
                     auth.setText("Authenticated");
-                    Access.setText("Access Token:"+tok+"nExpires:"+expire+"nRefresh Token:"+refresh);
+                    //Access.setText("Access Token:"+tok+"nExpires:"+expire+"nRefresh Token:"+refresh);
                     Log.d("Cherrie", "Before Feast API call");
                     FeastAPI.sharedAPI.authorizeUserWithOAuthToken(tok, new FeastAPI.RequestCallback() {
                         @Override
