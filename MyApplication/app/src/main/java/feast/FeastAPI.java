@@ -31,17 +31,17 @@ public class FeastAPI
 {
     public interface RequestCallback
     {
-        public void requestFinishedWithSuccess(Boolean success);
+        public void requestFinishedWithSuccess(Boolean success, VolleyError error);
     }
 
     public interface FavoritesCallback
     {
-        public void fetchedFavorites(Set<FoodItem> favorites);
+        public void fetchedFavorites(Set<FoodItem> favorites, VolleyError error);
     }
 
     public interface MenusCallback
     {
-        public void fetchedMenus(Set<Menu> menus);
+        public void fetchedMenus(Set<Menu> menus, VolleyError error);
     }
 
     public void setContext(Context context)
@@ -88,12 +88,12 @@ public class FeastAPI
                     }
                 }
 
-                callback.fetchedMenus(menus);
+                callback.fetchedMenus(menus, null);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.w("Riley", error.toString());
+                callback.fetchedMenus(null, error);
             }
         });
 
@@ -127,12 +127,12 @@ public class FeastAPI
                     }
                 }
 
-                callback.fetchedFavorites(foodItems);
+                callback.fetchedFavorites(foodItems, null);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.w("Riley", error.toString());
+                callback.fetchedFavorites(null, error);
             }
         });
 
@@ -159,12 +159,12 @@ public class FeastAPI
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, href, object, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                callback.requestFinishedWithSuccess(true);
+                callback.requestFinishedWithSuccess(true, null);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                callback.requestFinishedWithSuccess(false);
+                callback.requestFinishedWithSuccess(false, error);
             }
         });
 
@@ -178,12 +178,12 @@ public class FeastAPI
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE, href, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                callback.requestFinishedWithSuccess(true);
+                callback.requestFinishedWithSuccess(true, null);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                callback.requestFinishedWithSuccess(false);
+                callback.requestFinishedWithSuccess(false, error);
             }
         });
 
