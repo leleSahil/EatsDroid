@@ -30,13 +30,14 @@ class Main {
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
 
-        List<Menu> menus = DatabaseAbstraction.getMenus(c);
+        List<Menu> menus = DatabaseAbstraction.getMenus("2016-04-13");
         System.out.println("OUTS: "+menus.size());
 //        if(true){
 //            return;
 //        }
         System.out.println("Starting socket server on port 8001...");
         EatsSocketServer.startServer();
+
 
 
         System.out.println("Starting server on port 8000...");
