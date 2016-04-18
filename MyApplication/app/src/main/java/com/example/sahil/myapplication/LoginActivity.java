@@ -103,7 +103,7 @@ public class LoginActivity extends Activity {
                             edit.commit();
                             auth_dialog.dismiss();
                             new TokenGet().execute();
-                            Toast.makeText(getApplicationContext(),"Authorization Code is: " +authCode, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(),"Authorization Code is: " +authCode, Toast.LENGTH_SHORT).show();
                         }else if(url.contains("error=access_denied")){
                             Log.i("", "ACCESS_DENIED_HERE");
                             resultIntent.putExtra("code", authCode);
