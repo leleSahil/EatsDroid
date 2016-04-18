@@ -14,36 +14,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.*;
 import java.util.List;
-
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-
-import org.bson.types.ObjectId;
-
-import com.company.client.Client;
-import com.company.client.ResponseInterface;
-import com.company.models.Menu.FoodItem;
-import com.company.models.Menu;
-import com.company.models.Restaurant;
-import com.company.sockets.AuthenticationChecker;
-import com.company.sockets.Request;
-import com.company.sockets.Response;
 
 public class ClientFrame extends JFrame {
 	private static final long serialVersionUID = 9183816558021947333L;
@@ -262,7 +237,7 @@ public class ClientFrame extends JFrame {
 		        c.set(Calendar.MILLISECOND, 0);
 		        
 		        //impossible to arrive here without auth already being set
-				Request request = new Request(auth, new Request.RequestPullMenus(c));
+				Request request = new Request(auth, new Request.RequestPullMenus("2016-04-13"));
 		        new Client(request, new ResponseInterface() {
 
 		            Response resp;
