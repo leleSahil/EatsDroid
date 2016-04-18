@@ -1,10 +1,11 @@
 package com.example.sahil.myapplication;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ListView;
@@ -27,17 +28,29 @@ public class FavoriteActivity extends AppCompatActivity {
     private Boolean fetchedMenus = false;
     private Boolean fetchedFavorites = false;
 
+    public FavoriteActivity() {
+//        initializeListItems();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
 
 
-//        FavoriteFragment favoriteFragment = new FavoriteFragment();
-//        FragmentManager fm = getFragmentManager();
-//        FragmentTransaction ft = fm.beginTransaction();
-//        ft.add(R.id.FavoritesFragmentContainer, favoriteFragment);
+        FavoriteFragment favoriteFragment = new FavoriteFragment();
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.add(R.id.FavoritesFragmentContainer, favoriteFragment);
 //        ft.add(R.id.linearLayoutRestaurant, favoriteFragment).commit();
+    }
+
+    /*
+    private void initializeListItems() {
+        listItems = new ArrayList<ListItemParent>();
+        ListItemParent mealItem = new ListItemParent(ListItemParent.mealHeader);
+        mealItem.setTitle("Waiting for Favorites");
+        listItems.add(mealItem);
     }
 
     @Override
@@ -92,5 +105,6 @@ public class FavoriteActivity extends AppCompatActivity {
             listItems.add(food);
         }
     }
+    */
 
 }

@@ -10,22 +10,22 @@
     tools:context="com.example.sahil.myapplication.FavoriteActivity">
 
 
-    <!--<FrameLayout-->
-    <!--android:id="@+id/FavoritesFragmentContainer"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_weight="2"-->
-    <!--android:orientation="vertical" />-->
+    <FrameLayout
+    android:id="@+id/FavoritesFragmentContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="2"
+    android:orientation="vertical" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Favorites" />
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/favorite_listview">
-    </ListView>
+    <!--<ListView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:id="@+id/favorite_listview">-->
+    <!--</ListView>-->
 
     <!--<fragment android:name="com.example.android.fragments.FavoriteFragment"-->
         <!--android:id="@+id/favorites_fragment"-->

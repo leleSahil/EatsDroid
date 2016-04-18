@@ -39,7 +39,7 @@ public class FavoriteFragment extends Fragment {
 
     public FavoriteFragment() {
         // Required empty public constructor
-        initializeListItems();
+//        initializeListItems();
 
     }
 
@@ -69,6 +69,7 @@ public class FavoriteFragment extends Fragment {
 //            mParam1 = getArguments().getString(ARG_PARAM1);
 //            mParam2 = getArguments().getString(ARG_PARAM2);
 //        }
+        initializeListItems();
     }
 
     @Override
@@ -77,10 +78,8 @@ public class FavoriteFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favorite, container, false);
 
+
         fetchFavorites();
-
-
-
         return populateListView(view);
     }
 
@@ -90,7 +89,7 @@ public class FavoriteFragment extends Fragment {
     }
 
     private void setUpListView(View view) {
-        myListAdapter = new MyListAdapter(getContext(), R.id.favorite_listview, listItems);
+        myListAdapter = new MyListAdapter(getActivity(), R.id.favorite_listview, listItems);
         ListView favoriteListView= (ListView) view.findViewById(R.id.favorite_listview);
         favoriteListView.setAdapter(myListAdapter);
     }
