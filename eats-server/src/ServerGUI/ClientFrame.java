@@ -293,20 +293,30 @@ public class ClientFrame extends JFrame {
 		                    }
 		                    dateSuccess = true;
 		                    System.out.println("true");
-		                }else{
+		                }else {
+		                	if (this.resp != null){
+		                		JOptionPane.showMessageDialog(getParent(),
+										"The Server could not be reached",
+										"Menu request failed",
+										JOptionPane.INFORMATION_MESSAGE);
+		                	}
+		                	else {
+		                		JOptionPane.showMessageDialog(getParent(),
+										"There are no valid menus for the selected date",
+										"Menu request failed",
+										JOptionPane.INFORMATION_MESSAGE);
+		                	}
+		                
 		                    dateSuccess = false;
 		                    System.out.println("false");
+		                    restaurantChooser.removeAllItems();
+		                    mealChooser.removeAllItems();
+		    				sectionChooser.removeAllItems();
+		    				foodChooser.removeAll();
+		                    
 		                }
 		            }
-		        }).send();
-		        
-		        if (dateSuccess) {
-					restaurantChooser.setVisible(true);
-		        }
-		        else {
-		        	//popup
-		        }
-				
+		        }).send();	
 			}
 		});
 		
@@ -355,8 +365,8 @@ public class ClientFrame extends JFrame {
 		removeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (dateChooser.getSelectedItem() == null || restaurantChooser.getSelectedItem() == null 
-					 || mealChooser.getSelectedItem() == null || sectionChooser.getSelectedItem() == null) {
-					//popup
+					 || mealChooser.getSelectedItem() == null || sectionChooser.getSelectedItem() == null || foodChooser.getSelectedValue() == null) {
+					JOptionPane.showMessageDialog(cf, "Please select a date, restaurant, meal, section, then food item.");
 					return;
 				}
 				ObjectId menuid = ((Menu)(restaurantChooser.getSelectedItem()))._id;
@@ -378,26 +388,47 @@ public class ClientFrame extends JFrame {
 		                		//category does not exist anymore
 		                	}
 		                	else {
-			                    int d = dateChooser.getSelectedIndex();
+		                		//code for refreshing the selected date
+			                    /*int d = dateChooser.getSelectedIndex();
+			                    System.out.println(d);
 			                    int r = restaurantChooser.getSelectedIndex();
+			                    System.out.println(r);
 			                    int m = mealChooser.getSelectedIndex();
+			                    System.out.println(m);
 			                    int s = sectionChooser.getSelectedIndex();
+			                    System.out.println(s);
 			                    
-			                    if (d>=0) {
+			                    System.out.println(dateChooser.getItemCount());
+			                    if (d>0 && d<dateChooser.getItemCount()) {
 			                    	dateChooser.setSelectedIndex(d);
-			                    	if (r>=0) {
+			                    	while (restaurantChooser.getItemCount() == 0) {}
+			                    	System.out.println(restaurantChooser.getItemCount());
+			                    	if (r>0 && r<restaurantChooser.getItemCount()) {
 			                    		restaurantChooser.setSelectedIndex(r);
-			                    		if (m>=0) {
+			                    		System.out.println(mealChooser.getItemCount());
+			                    		if (m>0 && m<mealChooser.getItemCount()) {
 			                    			mealChooser.setSelectedIndex(m);
-			                    			if (s>=0) {
+			                    			System.out.println(sectionChooser.getItemCount());
+			                    			if (s>0 && s<sectionChooser.getItemCount()) {
 			    			                    sectionChooser.setSelectedIndex(s);
 			                    			}
 			                    		}
 			                    	}
-			                    }
+			                    }*/
 		                	}
-		                }else{
-		                    //popup
+		                }else {
+		                	if (this.resp != null){
+		                		JOptionPane.showMessageDialog(getParent(),
+										"The Server could not be reached",
+										"Menu request failed",
+										JOptionPane.INFORMATION_MESSAGE);
+		                	}
+		                	else {
+		                		JOptionPane.showMessageDialog(getParent(),
+										"The Server could not remove that item",
+										"Menu request failed",
+										JOptionPane.INFORMATION_MESSAGE);
+		                	}
 		                }
 		            }
 		        }).send();
@@ -409,7 +440,7 @@ public class ClientFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if (dateChooser.getSelectedItem() == null || restaurantChooser.getSelectedItem() == null 
 				 || mealChooser.getSelectedItem() == null || sectionChooser.getSelectedItem() == null) {
-					//popup
+					JOptionPane.showMessageDialog(cf, "Please select a date, restaurant, meal, and section.");
 					return;
 				}
 				ObjectId menuid = ((Menu)(restaurantChooser.getSelectedItem()))._id;
@@ -449,23 +480,32 @@ public class ClientFrame extends JFrame {
 		        }).send();
 				
 		        
-                int d = dateChooser.getSelectedIndex();
+		        /*int d = dateChooser.getSelectedIndex();
+                System.out.println(d);
                 int r = restaurantChooser.getSelectedIndex();
+                System.out.println(r);
                 int m = mealChooser.getSelectedIndex();
+                System.out.println(m);
                 int s = sectionChooser.getSelectedIndex();
+                System.out.println(s);
                 
-                if (d>=0) {
+                System.out.println(dateChooser.getItemCount());
+                if (d>0 && d<dateChooser.getItemCount()) {
                 	dateChooser.setSelectedIndex(d);
-                	if (r>=0) {
+                	while (restaurantChooser.getItemCount() == 0) {}
+                	System.out.println(restaurantChooser.getItemCount());
+                	if (r>0 && r<restaurantChooser.getItemCount()) {
                 		restaurantChooser.setSelectedIndex(r);
-                		if (m>=0) {
+                		System.out.println(mealChooser.getItemCount());
+                		if (m>0 && m<mealChooser.getItemCount()) {
                 			mealChooser.setSelectedIndex(m);
-                			if (s>=0) {
+                			System.out.println(sectionChooser.getItemCount());
+                			if (s>0 && s<sectionChooser.getItemCount()) {
 			                    sectionChooser.setSelectedIndex(s);
                 			}
                 		}
                 	}
-                }
+                }*/
         	}
 			
 		});
