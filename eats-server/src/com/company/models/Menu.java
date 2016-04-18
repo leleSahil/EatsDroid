@@ -61,7 +61,7 @@ public class Menu implements Serializable {
         public List<MealSections> meal_sections;
         
         public String toString() {
-        	return "------" + meal_name + "------";
+        	return meal_name;
         }
     }
 
@@ -80,7 +80,7 @@ public class Menu implements Serializable {
         public List<FoodItem> section_items;
         
         public String toString() {
-        	return "---" + section_name + "---";
+        	return section_name;
         }
     }
 

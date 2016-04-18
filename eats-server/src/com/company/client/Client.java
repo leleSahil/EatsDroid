@@ -4,6 +4,7 @@ import com.company.Constants;
 import com.company.sockets.Request;
 import com.company.sockets.Response;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -42,7 +43,7 @@ public class Client implements Runnable{
       } catch (ClassNotFoundException e) {
          e.printStackTrace();
          this.respCallback.callback(null);
-      }
+      } 
       new Thread(this.respCallback).start();
    }
 
