@@ -227,14 +227,16 @@ public class RestaurantFragment extends Fragment {
                 ListItemParent sectionItem = new ListItemParent(ListItemParent.sectionHeader);
                 sectionItem.setTitle(mealSection.getName());
                 listItems.add(sectionItem);
-                for(FoodItem foodItem: mealSection.getFoodItems()) {
-                    ListItemParent food = new ListItemParent(ListItemParent.foodHeader);
-                    food.setTitle(foodItem.getName()); // probably not necessary but oh well
-                    food.setFoodItem(foodItem);
+                if(mealSection.getFoodItems() != null) {
+                    for (FoodItem foodItem : mealSection.getFoodItems()) {
+                        ListItemParent food = new ListItemParent(ListItemParent.foodHeader);
+                        food.setTitle(foodItem.getName()); // probably not necessary but oh well
+                        food.setFoodItem(foodItem);
 
-                    food.setFavorites(this.favorites);
+                        food.setFavorites(this.favorites);
 
-                    listItems.add(food);
+                        listItems.add(food);
+                    }
                 }
             }
         }
