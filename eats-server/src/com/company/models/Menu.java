@@ -39,6 +39,9 @@ public class Menu implements Serializable {
     public Menu(){}
 
     public static class Meal implements Serializable{
+
+        private static final long serialVersionUID = 1L;
+
         public Meal() {}
 
         public Meal(Date meal_end_time, Date meal_begin_time, String meal_availablity, String meal_identifier, String meal_name, List<MealSections> meal_sections) {
@@ -63,6 +66,7 @@ public class Menu implements Serializable {
     }
 
     public static class MealSections implements Serializable{
+        private static final long serialVersionUID = 1L;
         public MealSections(){}
 
         public MealSections(String section_identifier, String section_name, List<FoodItem> section_items) {
@@ -81,6 +85,7 @@ public class Menu implements Serializable {
     }
 
     public static class FoodItem implements Serializable{
+        private static final long serialVersionUID = 1L;
         public FoodItem(){}
 
         public String food_identifier;
