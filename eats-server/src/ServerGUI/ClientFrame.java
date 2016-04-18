@@ -109,7 +109,7 @@ public class ClientFrame extends JFrame {
 		Date today = new Date();
 		Calendar c = Calendar.getInstance(); 
 		c.setTime(today);
-		for (int i = 0; i<30; i++) {
+		for (int i = 0; i<3; i++) {
 			dateChooser.addItem(new UIDate(c.getTime()));
 			c.add(Calendar.DATE, 1);
 		}
@@ -248,21 +248,10 @@ public class ClientFrame extends JFrame {
 		dateChooser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				UIDate curr = (UIDate) dateChooser.getSelectedItem();
-				
-				Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"), Locale.US);
-				//c.setTime(curr.getDate());
-				//System.out.println(curr.getDate());
-				//c.add(Calendar.MONTH, -1);
-				c.set(Calendar.YEAR, 2016); // regular year
-		        c.set(Calendar.MONTH, 3); // from 0 - 11
-		        c.set(Calendar.DATE, 13);  // from 1 - 31..
-				c.set(Calendar.HOUR, 0);
-		        c.set(Calendar.MINUTE, 0);
-		        c.set(Calendar.SECOND, 0);
-		        c.set(Calendar.MILLISECOND, 0);
 		        
 		        //impossible to arrive here without auth already being set
-				Request request = new Request(auth, new Request.RequestPullMenus(c));
+				String JSONFormattedDate = curr.getDate().getYear() + "-" + curr.getDate().getMonth() + "-" +  curr.getDate().getDate();
+				Request request = new Request(auth, new Request.RequestPullMenus(JSONFormattedDate));
 		        new Client(request, new ResponseInterface() {
 
 		            Response resp;
@@ -275,10 +264,12 @@ public class ClientFrame extends JFrame {
 		            public void run() {
 		                System.out.println("SOCKETS: Callback called");
 		                if(this.resp != null && this.resp.requestSuccess){
+		                	//restaurantChooser.removeAllItems();
+		                	foodChooser.removeAllItems();
 		                    menus = (List<Menu>)this.resp.data;
 		                    for(Menu menu : menus){
 		                        System.out.println("SOCKETS: menu availablilty -> "+menu.restaurant_availability);
-		                        restaurantChooser.addItem(menu);//add to combo box
+		                        if (menu.restaurant_availability.equals("open")) restaurantChooser.addItem(menu);//add to combo box
 		                    }
 		                    dateSuccess = true;
 		                    System.out.println("true");
@@ -301,7 +292,8 @@ public class ClientFrame extends JFrame {
 		
 		restaurantChooser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String curr = (String)restaurantChooser.getSelectedItem();
+				foodChooser.removeAllItems();
+				//String curr = (String)restaurantChooser.getSelectedItem();
 				for (Menu menu : menus){
 					if (menu == restaurantChooser.getSelectedItem()) {
 						for (Menu.Meal m : menu.meals) {
@@ -328,8 +320,12 @@ public class ClientFrame extends JFrame {
 		
 		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//while (currMenu == null && )
-				Request request = new Request(auth, new Request.RequestMenuAdd(((Menu)(restaurantChooser.getSelectedItem()))._id.toString(), "breakfast", "americana", "test_food", "Test FOOD"));
+				if (dateChooser.getSelectedItem() == null || restaurantChooser.getSelectedItem() == null) {
+					//popup
+					return;
+				}
+				ObjectId menuid = ((Menu)(restaurantChooser.getSelectedItem()))._id;
+				Request request = new Request(auth, new Request.RequestMenuAdd(menuid.toString(), "breakfast", "americana", "test_food", "Test FOOD"));
 		        new Client(request, new ResponseInterface() {
 
 		            Response resp;
