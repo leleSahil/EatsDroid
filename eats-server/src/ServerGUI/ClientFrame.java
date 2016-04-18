@@ -20,8 +20,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.*;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -172,84 +170,58 @@ public class ClientFrame extends JFrame {
 					public void actionPerformed(ActionEvent e) {
 						Socket s = null;
 						BufferedReader in = null;
-						try {
-							/*in = new BufferedReader(new FileReader(configFile));
-							String temp = in.readLine();
-							int port = Integer.parseInt(temp);
-							temp = in.readLine();*/
-							//s = new Socket(temp, port);
-							
-							//oos = new ObjectOutputStream(s.getOutputStream());
-							//ois = new ObjectInputStream(s.getInputStream());
-							//Credentials c = new Credentials();
-							//c.user = loginUser.getText();
-							//c.pass = (Integer.toString(loginPass.getText().hashCode()));
-							
-							auth = new Request.RequestAuthentication(loginUser.getText(), AuthenticationChecker.hash(loginPass.getText()));
-
-
-					        // Login request
-					        Request request = new Request(null, new Request.RequestCheckAuthentication(loginUser.getText(), AuthenticationChecker.hash(loginPass.getText())));
-							new Client(request, new ResponseInterface() {
-
-					            Response resp;
-					            @Override
-					            public void callback(Response resp) {
-					               this.resp = resp;
-					            }
-
-					            @Override
-					            public void run() {
-					                System.out.println("SOCKETS: Callback called");
-					                if(this.resp != null && this.resp.requestSuccess){
-					                	cf.loginSuccess = true;
-					                }else{
-					                	cf.loginSuccess = false;
-					                }
-
-					            }
-					        }).send();
-							//(Boolean)ois.readObject();
-							//System.out.println(success);
-							if (loginSuccess) {
-								cf.remove(loginFields);
-								cf.remove(buttons);
-								//cf.getContentPane().setLayout(mgr);
-								cf.add(dateChooser);
-								cf.add(restaurantChooser);
-								cf.add(foodChooser);
-								cf.add(buttonPanel);
-								cf.revalidate();
-								cf.repaint();
-							}
-							else {
-								JOptionPane.showMessageDialog(getParent(),
-															"Invalid Admin Username or Password",
-															"Login Failed",
-															JOptionPane.INFORMATION_MESSAGE);
-								if (s != null) {
-									s.close();
-								}
-							}
-						} catch (IOException ioe) {
-							JOptionPane.showMessageDialog(getParent(),
-									"Server could not be reached",
-									"Connection Failed",
-									JOptionPane.INFORMATION_MESSAGE);
-							ioe.printStackTrace();
-						/*} catch (ClassNotFoundException cnfe) {
-							cnfe.printStackTrace();*/
-						} finally {
-							try {
-								if (in != null) {
-									in.close();
-								}
-							} catch (IOException ioe) {
-								System.out.println("ioe: " + ioe.getMessage());
-							}
-						}
+						/*in = new BufferedReader(new FileReader(configFile));
+						String temp = in.readLine();
+						int port = Integer.parseInt(temp);
+						temp = in.readLine();*/
+						//s = new Socket(temp, port);
 						
+						//oos = new ObjectOutputStream(s.getOutputStream());
+						//ois = new ObjectInputStream(s.getInputStream());
+						//Credentials c = new Credentials();
+						//c.user = loginUser.getText();
+						//c.pass = (Integer.toString(loginPass.getText().hashCode()));
 						
+						auth = new Request.RequestAuthentication(loginUser.getText(), AuthenticationChecker.hash(loginPass.getText()));
+
+
+				        // Login request
+				        Request request = new Request(null, new Request.RequestCheckAuthentication(loginUser.getText(), AuthenticationChecker.hash(loginPass.getText())));
+				        System.out.println(loginUser.getText());
+				        System.out.println(loginPass.getText());
+						new Client(request, new ResponseInterface() {
+
+				            Response resp;
+				            @Override
+				            public void callback(Response resp) {
+				               this.resp = resp;
+				            }
+
+				            @Override
+				            public void run() {
+				                System.out.println("SOCKETS: Callback called");
+				                if(this.resp != null && this.resp.requestSuccess){
+				                	cf.remove(loginFields);
+									cf.remove(buttons);
+									//cf.getContentPane().setLayout(mgr);
+									cf.add(dateChooser);
+									cf.add(restaurantChooser);
+									cf.add(foodChooser);
+									cf.add(buttonPanel);
+									cf.revalidate();
+									cf.repaint();
+				                }else{
+				                	JOptionPane.showMessageDialog(getParent(),
+											"Invalid Admin Username or Password",
+											"Login Failed",
+											JOptionPane.INFORMATION_MESSAGE);
+				                }
+
+				            }
+				        }).send();
+						//(Boolean)ois.readObject();
+						//System.out.println(success);
+					
 					}
 				});
 				send.setAlignmentX(CENTER_ALIGNMENT);
@@ -278,8 +250,13 @@ public class ClientFrame extends JFrame {
 				UIDate curr = (UIDate) dateChooser.getSelectedItem();
 				
 				Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"), Locale.US);
-				c.setTime(curr.getDate());
-		        c.set(Calendar.HOUR, 0);
+				//c.setTime(curr.getDate());
+				//System.out.println(curr.getDate());
+				//c.add(Calendar.MONTH, -1);
+				c.set(Calendar.YEAR, 2016); // regular year
+		        c.set(Calendar.MONTH, 3); // from 0 - 11
+		        c.set(Calendar.DATE, 13);  // from 1 - 31..
+				c.set(Calendar.HOUR, 0);
 		        c.set(Calendar.MINUTE, 0);
 		        c.set(Calendar.SECOND, 0);
 		        c.set(Calendar.MILLISECOND, 0);
@@ -304,8 +281,10 @@ public class ClientFrame extends JFrame {
 		                        restaurantChooser.addItem(menu);//add to combo box
 		                    }
 		                    dateSuccess = true;
+		                    System.out.println("true");
 		                }else{
 		                    dateSuccess = false;
+		                    System.out.println("false");
 		                }
 		            }
 		        }).send();
@@ -324,7 +303,7 @@ public class ClientFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				String curr = (String)restaurantChooser.getSelectedItem();
 				for (Menu menu : menus){
-					if (menu.restaurant_name.equals(restaurantChooser.getSelectedItem())) {
+					if (menu == restaurantChooser.getSelectedItem()) {
 						for (Menu.Meal m : menu.meals) {
 							foodChooser.addItem(m);
 							for (Menu.MealSections s : m.meal_sections) {
