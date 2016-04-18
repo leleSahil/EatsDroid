@@ -95,17 +95,19 @@ public class DatabaseAbstraction {
         return false;
     }
 
-    public static List<Menu>  getMenus(Calendar date){
-        String yo = date.get(Calendar.YEAR)+"-"+String.format("%02d", (date.get(Calendar.MONTH)+1))+"-"+date.get(Calendar.DATE)+"T00:00:00Z";
-        System.out.println(yo);
-        java.util.Date datetimeDate = new DateTime( yo ).toDate();
-        java.util.Date newdatetimeDate = new DateTime( "2016-04-13T00:00:00Z" ).toDate();
-        System.out.println("YOFOIEWOF");
-        System.out.println(datetimeDate);
-        System.out.println(newdatetimeDate);
-        System.out.println(datetimeDate.getTime());
-        Calendar greg = new GregorianCalendar(2014, 1, 22);
-        System.out.println(greg.getTime());
+    public static List<Menu>  getMenus(String date){
+        //String yo = date.get(Calendar.YEAR)+"-"+String.format("%02d", (date.get(Calendar.MONTH)+1))+"-"+date.get(Calendar.DATE)+"T00:00:00Z";
+//        System.out.println(yo);
+
+        java.util.Date datetimeDate = new DateTime( date+"T00:00:00Z").toDate();
+        System.out.println("GETTING DATETIME: "+datetimeDate);
+//        java.util.Date newdatetimeDate = new DateTime( "2016-04-13T00:00:00Z" ).toDate();
+//        System.out.println("YOFOIEWOF");
+//        System.out.println(datetimeDate);
+//        System.out.println(newdatetimeDate);
+//        System.out.println(datetimeDate.getTime());
+//        Calendar greg = new GregorianCalendar(2014, 1, 22);
+//        System.out.println(greg.getTime());
 //        if(true){
 //            return null;
 //        }

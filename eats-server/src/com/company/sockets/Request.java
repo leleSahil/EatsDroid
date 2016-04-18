@@ -1,7 +1,6 @@
 package com.company.sockets;
 
 import java.io.Serializable;
-import java.util.Calendar;
 
 /**
  * Created by brian on 4/16/16.
@@ -68,10 +67,10 @@ public class Request implements Serializable{
 
     // Pragma: Request
     public static class RequestPullMenus implements Serializable{
-        public RequestPullMenus(Calendar date) {
+        public RequestPullMenus(String date) {
             this.date = date;
         }
-        Calendar date;
+        String date;
     }
 
 

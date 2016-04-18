@@ -97,7 +97,7 @@ public class ClientExample {
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
 
-        request = new Request(auth, new Request.RequestPullMenus(c));
+        request = new Request(auth, new Request.RequestPullMenus("2016-04-13"));
         new Client(request, new ResponseInterface() {
 
             Response resp;
