@@ -3,6 +3,8 @@ package ServerGUI;
 import com.company.client.Client;
 import com.company.client.ResponseInterface;
 import com.company.models.Menu;
+import com.company.models.Menu.Meal;
+import com.company.models.Menu.MealSections;
 import com.company.sockets.AuthenticationChecker;
 import com.company.sockets.Request;
 import com.company.sockets.Response;
@@ -16,16 +18,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.*;
 import java.util.List;
 
 public class ClientFrame extends JFrame {
 	private static final long serialVersionUID = 9183816558021947333L;
-	private static String configFile = "ClientConfig.txt";
 	
 	ClientFrame cf;
 	private Request.RequestAuthentication auth;
@@ -35,15 +32,10 @@ public class ClientFrame extends JFrame {
 	private JButton guest;
 	
 	private JPanel loginFields;
-	private JLabel userLabel;
 	private JTextField loginUser;
-	private JLabel passLabel;
 	private JTextField loginPass;
 	
 	private JButton send;
-	
-	private ObjectInputStream ois;
-	private ObjectOutputStream oos;
 	
 	boolean showLogin = false;
 	
@@ -55,8 +47,8 @@ public class ClientFrame extends JFrame {
 	
 	private JComboBox<UIDate> dateChooser;
 	private JComboBox<Menu> restaurantChooser;
-	private JComboBox mealChooser;
-	private JComboBox sectionChooser;
+	private JComboBox<Meal> mealChooser;
+	private JComboBox<MealSections> sectionChooser;
 	private JList<Menu.FoodItem> foodChooser;
 	private JScrollPane listScroller;
 	
@@ -67,9 +59,6 @@ public class ClientFrame extends JFrame {
 	private JPanel foodPanel;
 	
 	List<Menu> menus;
-	
-	private boolean loginSuccess = false;
-	private boolean dateSuccess = false;
 	
 	public ClientFrame()
 	{
@@ -105,8 +94,8 @@ public class ClientFrame extends JFrame {
 		Calendar t = Calendar.getInstance();
 		t.setTime(today);
 		restaurantChooser = new JComboBox<Menu>();
-		mealChooser = new JComboBox();
-		sectionChooser = new JComboBox();
+		mealChooser = new JComboBox<Meal>();
+		sectionChooser = new JComboBox<MealSections>();
 		foodChooser = new JList<Menu.FoodItem>();
 		foodChooser.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		foodChooser.setLayoutOrientation(JList.VERTICAL);
@@ -169,7 +158,7 @@ public class ClientFrame extends JFrame {
 				loginFields.setMaximumSize(new Dimension(150,100));
 				loginFields.setAlignmentX(CENTER_ALIGNMENT);
 				
-				loginUser = new JTextField("admin");
+				loginUser = new JTextField("Username");
 				loginUser.addMouseListener(new MouseAdapter() {
 					public void mouseClicked(MouseEvent e) {
 						loginUser.setText("");
@@ -178,7 +167,7 @@ public class ClientFrame extends JFrame {
 				loginUser.setAlignmentX(CENTER_ALIGNMENT);
 				loginFields.add(loginUser);
 				
-				loginPass = new JPasswordField("password");
+				loginPass = new JPasswordField("Password");
 				loginPass.addMouseListener(new MouseAdapter() {
 					public void mouseClicked(MouseEvent e) {
 						loginPass.setText("");
@@ -196,8 +185,6 @@ public class ClientFrame extends JFrame {
 
 				        // Login request
 				        Request request = new Request(null, new Request.RequestCheckAuthentication(loginUser.getText(), AuthenticationChecker.hash(loginPass.getText())));
-				        System.out.println(loginUser.getText());
-				        System.out.println(loginPass.getText());
 						new Client(request, new ResponseInterface() {
 
 				            Response resp;
@@ -270,9 +257,10 @@ public class ClientFrame extends JFrame {
 				UIDate curr = (UIDate) dateChooser.getSelectedItem();
 		        
 		        //impossible to arrive here without auth already being set
+				@SuppressWarnings("deprecation")
 				String JSONFormattedDate = (curr.getDate().getYear()+1900) + "-" + (curr.getDate().getMonth()+1) + "-" +  curr.getDate().getDate();
 				Request request = new Request(auth, new Request.RequestPullMenus(JSONFormattedDate));
-				System.out.println(JSONFormattedDate);
+				//System.out.println(JSONFormattedDate);
 		        new Client(request, new ResponseInterface() {
 
 		            Response resp;
@@ -281,17 +269,17 @@ public class ClientFrame extends JFrame {
 		                this.resp = resp;
 		            }
 
-		            @Override
+		            @SuppressWarnings("unchecked")
+					@Override
 		            public void run() {
 		                System.out.println("SOCKETS: Callback called");
 		                if(this.resp != null && this.resp.requestSuccess){
 		                	
 		                    menus = (List<Menu>)this.resp.data;
 		                    for(Menu menu : menus){
-		                        System.out.println("SOCKETS: menu availablilty -> "+menu.restaurant_availability);
+		                        //System.out.println("SOCKETS: menu availablilty -> "+menu.restaurant_availability);
 		                        if (menu.restaurant_availability.equals("open")) restaurantChooser.addItem(menu);//add to combo box
 		                    }
-		                    dateSuccess = true;
 		                    System.out.println("true");
 		                }else {
 		                	if (this.resp != null){
@@ -306,8 +294,6 @@ public class ClientFrame extends JFrame {
 										"Menu request failed",
 										JOptionPane.INFORMATION_MESSAGE);
 		                	}
-		                
-		                    dateSuccess = false;
 		                    System.out.println("false");
 		                    restaurantChooser.removeAllItems();
 		                    mealChooser.removeAllItems();
@@ -384,6 +370,7 @@ public class ClientFrame extends JFrame {
 		            public void run() {
 		                System.out.println("SOCKETS: Callback called delete");
 		                if(this.resp != null && this.resp.requestSuccess) {
+		                	System.out.println("Success");
 		                	if (foodChooser.getModel().getSize() == 1) {
 		                		//category does not exist anymore
 		                	}
@@ -473,8 +460,19 @@ public class ClientFrame extends JFrame {
 		                System.out.println("SOCKETS: Callback called");
 		                if(this.resp != null && this.resp.requestSuccess){
 		                    System.out.println("Success");
-		                }else{
-		                    System.out.println("Failure");
+		                }else {
+		                	if (this.resp != null){
+		                		JOptionPane.showMessageDialog(getParent(),
+										"The Server could not be reached",
+										"Menu request failed",
+										JOptionPane.INFORMATION_MESSAGE);
+		                	}
+		                	else {
+		                		JOptionPane.showMessageDialog(getParent(),
+										"The Server could not remove that item",
+										"Menu request failed",
+										JOptionPane.INFORMATION_MESSAGE);
+		                	}
 		                }
 		            }
 		        }).send();
