@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,15 +20,6 @@ import feast.FoodItem;
 import feast.Meal;
 
 public class FavoriteFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
 
     private Set<FoodItem> favorites = null;
 
@@ -44,6 +36,7 @@ public class FavoriteFragment extends Fragment {
     }
 
     private void initializeListItems() {
+        Log.w("Favorite", "Inside initializeListItems");
         listItems = new ArrayList<ListItemParent>();
         ListItemParent mealItem = new ListItemParent(ListItemParent.mealHeader);
         mealItem.setTitle("Waiting for Favorites");
@@ -103,7 +96,7 @@ public class FavoriteFragment extends Fragment {
                     if (error == null)
                     {
                         fetchedFavorites = true;
-
+                        Log.w("Favorite", "favorites are: " + favorites);
                         FavoriteFragment.this.favorites = favorites;
 
                         // recreate ArrayList<ListItemParent> listItems
@@ -119,6 +112,10 @@ public class FavoriteFragment extends Fragment {
     }
 
     private void updateListItems(Set<FoodItem> favorites) {
+        ListItemParent mealItem = new ListItemParent(ListItemParent.mealHeader);
+        mealItem.setTitle("Your Favorites");
+        listItems.add(mealItem);
+
         for(FoodItem favorite: favorites) {
             ListItemParent food = new ListItemParent(ListItemParent.foodHeader);
             food.setTitle(favorite.getName()); // probably not necessary but oh well
