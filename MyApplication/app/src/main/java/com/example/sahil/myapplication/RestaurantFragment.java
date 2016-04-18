@@ -145,7 +145,7 @@ public class RestaurantFragment extends Fragment {
 
     private void fetchDataForDate(Date date)
     {
-        Log.w("Riley", "WTF");
+        Log.w("Sahil", "fetch menus for this date: " + date);
 
         FeastAPI.sharedAPI.fetchMenusForDateWithCompletion(date, new FeastAPI.MenusCallback() {
             @Override
@@ -166,6 +166,10 @@ public class RestaurantFragment extends Fragment {
                             // TODO check that a menu for that diningHallID actually exists
                             updateListItems(menus.get(new Integer(diningHallID)));
                             myListAdapter.notifyDataSetChanged();
+                        } else {
+                            Log.w("Sahil", "Menus was empty");
+                            Toast toast = Toast.makeText(EatsApplication.applicationContext, "Failed to fetch menu data.", Toast.LENGTH_LONG);
+                            toast.show();
                         }
                     }
 
@@ -196,9 +200,11 @@ public class RestaurantFragment extends Fragment {
                         {
                             // recreate ArrayList<ListItemParent> listItems
                             // notifyDataSetChanged()
-                            listItems.clear();
-                            updateListItems(menus.get(new Integer(diningHallID)));
-                            myListAdapter.notifyDataSetChanged();
+                            if(!menus.isEmpty()) {
+                                listItems.clear();
+                                updateListItems(menus.get(new Integer(diningHallID)));
+                                myListAdapter.notifyDataSetChanged();
+                            }
                         }
                     }
                 }

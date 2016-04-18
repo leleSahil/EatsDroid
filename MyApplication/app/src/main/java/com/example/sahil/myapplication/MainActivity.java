@@ -27,6 +27,7 @@ import com.example.sahil.myapplication.Utils.CalendarUtils;
 import java.util.Calendar;
 
 import butterknife.Bind;
+import feast.FeastAPI;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -91,6 +92,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        // TODO hide the favorites button if the person isn't logged in
+        if(!FeastAPI.sharedAPI.isUserAuthorized()) {
+            MenuItem item = menu.findItem(R.id.action_settings);
+            item.setVisible(false);
+        }
         return true;
     }
 
@@ -129,6 +135,10 @@ public class MainActivity extends AppCompatActivity {
 
             // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(getActivity(), this, year, month, day);
+//            DatePickerDialog pickerDialog = new DatePickerDialog(getActivity(), this, year, month, day);
+//            pickerDialog.getDatePicker().setMaxDate(maxDate);
+//            pickerDialog.getDatePicker().setMinDate(minDate); // System.currentTimeMillis() - 1000
+//            return pickerDialog;
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
