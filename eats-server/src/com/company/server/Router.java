@@ -17,11 +17,17 @@ import java.util.HashMap;
 public class Router implements HttpHandler {
 
     HashMap<String, JsonRequestHandlerInterface> mapping = new HashMap<String, JsonRequestHandlerInterface>();
+    Trie trie;
     public Router(){
-        registerRoute("/users", new UserController());
-        registerRoute("/restaurants", new RestaurantController());
-        registerRoute("/menus", new MenuController());
-        registerRoute("/authorize", new AuthorizeController());
+        trie = new Trie();
+        trie.insert("/users", new UserController());
+        trie.insert("/restaurants", new RestaurantController());
+        trie.insert("/menus", new MenuController());
+        trie.insert("/authorize", new AuthorizeController());
+//        registerRoute("/users", new UserController());
+//        registerRoute("/restaurants", new RestaurantController());
+//        registerRoute("/menus", new MenuController());
+//        registerRoute("/authorize", new AuthorizeController());
     }
 
     public void registerRoute(String path, JsonRequestHandlerInterface requestHandler){
@@ -40,7 +46,12 @@ public class Router implements HttpHandler {
 
 
         System.out.println("Mapping String:"+mappingString);
-        JsonRequestHandlerInterface requestHandler = mapping.get(mappingString);
+//        JsonRequestHandlerInterface requestHandler = mapping.get(mappingString);
+        JsonRequestHandlerInterface requestHandler = null;
+        TrieNode node = trie.searchNode(mappingString);
+        if(node != null){
+            requestHandler = node.jsonRequestHandlerInterface;
+        }
 
         if(requestHandler == null){
             System.out.println("handler is null...");
