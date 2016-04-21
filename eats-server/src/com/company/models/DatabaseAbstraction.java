@@ -116,10 +116,11 @@ public class DatabaseAbstraction {
 //        if(true){
 //            return null;
 //        }
+        String yoooo = date;
         Datastore ds = new Morphia().createDatastore(DatabaseSingleton.getInstance().getClient(), Constants.MONGO_DB);
         System.out.println("TRYING DATE!!!"+date);
 
-        Query q = ds.createQuery(Menu.class).filter("serizalized_date =", date).disableValidation();
+        Query q = ds.createQuery(Menu.class).field("serizalized_date").equal(yoooo).disableValidation();
         return q.asList();
     }
 
