@@ -2,20 +2,21 @@ package com.company.models;
 
 import com.company.Constants;
 import org.bson.types.ObjectId;
-import org.joda.time.DateTime;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.mongodb.morphia.query.Query;
 import org.mongodb.morphia.query.UpdateOperations;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by brian on 4/16/16.
  */
 public class DatabaseAbstraction {
 
-    public static void main(String[] args){
+    public  void main(String[] args){
         System.out.println("YOOOOO;");
 
         String _id = "57118b9b63259774a7d78800";
@@ -27,7 +28,7 @@ public class DatabaseAbstraction {
         System.out.println("yoooo" + me);
     }
 
-    public static boolean removeItem(String _id, String meal_identifier, String section_identifier, String food_identifier){
+    public  boolean removeItem(String _id, String meal_identifier, String section_identifier, String food_identifier){
         Datastore ds = new Morphia().createDatastore(DatabaseSingleton.getInstance().getClient(), Constants.MONGO_DB);
         Query q = ds.createQuery(Menu.class).filter("_id =", new ObjectId(_id));
         List<Menu> menus = q.asList();
@@ -62,7 +63,7 @@ public class DatabaseAbstraction {
         return false;
     }
 
-    public static boolean addItem(String _id, String meal_identifier, String section_identifier, String food_identifier, String food_name){
+    public  boolean addItem(String _id, String meal_identifier, String section_identifier, String food_identifier, String food_name){
         Datastore ds = new Morphia().createDatastore(DatabaseSingleton.getInstance().getClient(), Constants.MONGO_DB);
         Query q = ds.createQuery(Menu.class).filter("_id =", new ObjectId(_id));
         List<Menu> menus = q.asList();
@@ -95,12 +96,16 @@ public class DatabaseAbstraction {
         return false;
     }
 
-    public static List<Menu>  getMenus(String date){
+    public  List<Menu>  getMenus(String date){
         //String yo = date.get(Calendar.YEAR)+"-"+String.format("%02d", (date.get(Calendar.MONTH)+1))+"-"+date.get(Calendar.DATE)+"T00:00:00Z";
 //        System.out.println(yo);
 
-        java.util.Date datetimeDate = new DateTime( date+"T00:00:00Z").toDate();
-        System.out.println("GETTING DATETIME: "+datetimeDate);
+//        java.util.Date datetimeDate = new DateTime( date+"T00:00:00Z").toDate();
+//        DateFormat df = new SimpleDateFormat("EEE MMM dd kk:mm:ss z yyyy");
+//        String dataSerialized = df.format(new Date());
+//
+//
+//        System.out.println("GETTING DATETIME: "+datetimeDate);
 //        java.util.Date newdatetimeDate = new DateTime( "2016-04-13T00:00:00Z" ).toDate();
 //        System.out.println("YOFOIEWOF");
 //        System.out.println(datetimeDate);
@@ -112,9 +117,9 @@ public class DatabaseAbstraction {
 //            return null;
 //        }
         Datastore ds = new Morphia().createDatastore(DatabaseSingleton.getInstance().getClient(), Constants.MONGO_DB);
-        System.out.println(date);
+        System.out.println("TRYING DATE!!!"+date);
 
-        Query q = ds.createQuery(Menu.class).filter("date =", datetimeDate);
+        Query q = ds.createQuery(Menu.class).filter("serizalized_date =", date).disableValidation();
         return q.asList();
     }
 

@@ -38,13 +38,13 @@ public class RequestHandler implements Runnable{
                         respond(new Response(false, null));
                     }else if(request.data instanceof  Request.RequestMenuAdd) {
                         Request.RequestMenuAdd addCtx = (Request.RequestMenuAdd)request.data;
-                        respond(new Response(DatabaseAbstraction.addItem(addCtx._id, addCtx.meal_identifier, addCtx.section_identifier, addCtx.food_identifier, addCtx.food_name), null));
+                        respond(new Response(new DatabaseAbstraction().addItem(addCtx._id, addCtx.meal_identifier, addCtx.section_identifier, addCtx.food_identifier, addCtx.food_name), null));
                     }else if(request.data instanceof  Request.RequestMenuDelete) {
                         Request.RequestMenuDelete addCtx = (Request.RequestMenuDelete)request.data;
-                        respond(new Response(DatabaseAbstraction.removeItem(addCtx._id, addCtx.meal_identifier, addCtx.section_identifier, addCtx.food_identifier), null));
+                        respond(new Response(new DatabaseAbstraction().removeItem(addCtx._id, addCtx.meal_identifier, addCtx.section_identifier, addCtx.food_identifier), null));
                     }else if(request.data instanceof  Request.RequestPullMenus) {
                         Request.RequestPullMenus addCtx = (Request.RequestPullMenus)request.data;
-                        List<Menu> menus = DatabaseAbstraction.getMenus(addCtx.date);
+                        List<Menu> menus = new DatabaseAbstraction().getMenus(addCtx.date);
                         respond(new Response(true, menus));
                     }
                 }
