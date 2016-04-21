@@ -22,7 +22,7 @@ public class Menu implements Serializable {
     @Id
     public ObjectId _id;
     public List<Meal> meals;
-    public Date date;
+//    public Date date;
     public String restaurant_availability;
     @Reference
     public ObjectId restaurant_id;
@@ -31,7 +31,7 @@ public class Menu implements Serializable {
     public Menu(ObjectId _id, List<Meal> meals, Date date, String restaurant_availability, ObjectId restaurant_id) {
         this._id = _id;
         this.meals = meals;
-        this.date = date;
+//        this.date = date;
         this.restaurant_availability = restaurant_availability;
         this.restaurant_id = restaurant_id;
     }
@@ -45,16 +45,16 @@ public class Menu implements Serializable {
         public Meal() {}
 
         public Meal(Date meal_end_time, Date meal_begin_time, String meal_availablity, String meal_identifier, String meal_name, List<MealSections> meal_sections) {
-            this.meal_end_time = meal_end_time;
-            this.meal_begin_time = meal_begin_time;
+//            this.meal_end_time = meal_end_time;
+//            this.meal_begin_time = meal_begin_time;
             this.meal_availablity = meal_availablity;
             this.meal_identifier = meal_identifier;
             this.meal_name = meal_name;
             this.meal_sections = meal_sections;
         }
 
-        public Date meal_end_time;
-        public Date meal_begin_time;
+//        public Date meal_end_time;
+//        public Date meal_begin_time;
         public String meal_availablity; // "open" or "closed"
         public String meal_identifier; // "breakfast", "lunch"
         public String meal_name; // "Breakfast"

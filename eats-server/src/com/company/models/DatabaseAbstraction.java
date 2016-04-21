@@ -1,6 +1,8 @@
 package com.company.models;
 
 import com.company.Constants;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
@@ -96,7 +98,8 @@ public class DatabaseAbstraction {
         return false;
     }
 
-    public  List<Menu>  getMenus(String date){
+
+    public synchronized List<Menu>  getMenus(String date){
         //String yo = date.get(Calendar.YEAR)+"-"+String.format("%02d", (date.get(Calendar.MONTH)+1))+"-"+date.get(Calendar.DATE)+"T00:00:00Z";
 //        System.out.println(yo);
 
@@ -116,8 +119,11 @@ public class DatabaseAbstraction {
 //        if(true){
 //            return null;
 //        }
+        MongoDatabase database;
+        MongoClient mongoClient;
+        mongoClient = new MongoClient(Constants.MONGO_HOST, Constants.MONGO_PORT);
         String yoooo = date;
-        Datastore ds = new Morphia().createDatastore(DatabaseSingleton.getInstance().getClient(), Constants.MONGO_DB);
+        Datastore ds = new Morphia().createDatastore(mongoClient, Constants.MONGO_DB);
         System.out.println("TRYING DATE!!!"+date);
 
         Query q = ds.createQuery(Menu.class).field("serizalized_date").equal(yoooo).disableValidation();
