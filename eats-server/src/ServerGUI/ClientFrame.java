@@ -259,6 +259,7 @@ public class ClientFrame extends JFrame {
 		        //impossible to arrive here without auth already being set
 				@SuppressWarnings("deprecation")
 				String JSONFormattedDate = (curr.getDate().getYear()+1900) + "-" + (curr.getDate().getMonth()+1) + "-" +  curr.getDate().getDate();
+				System.out.println(JSONFormattedDate);
 				Request request = new Request(auth, new Request.RequestPullMenus(JSONFormattedDate));
 				//System.out.println(JSONFormattedDate);
 		        new Client(request, new ResponseInterface() {
@@ -277,7 +278,7 @@ public class ClientFrame extends JFrame {
 		                	
 		                    menus = (List<Menu>)this.resp.data;
 		                    for(Menu menu : menus){
-		                        //System.out.println("SOCKETS: menu availablilty -> "+menu.restaurant_availability);
+		                        System.out.println("SOCKETS: menu availablilty -> "+menu.restaurant_availability);
 		                        if (menu.restaurant_availability.equals("open")) restaurantChooser.addItem(menu);//add to combo box
 		                    }
 		                    System.out.println("true");
@@ -376,7 +377,7 @@ public class ClientFrame extends JFrame {
 		                	}
 		                	else {
 		                		//code for refreshing the selected date
-			                    /*int d = dateChooser.getSelectedIndex();
+			                    int d = dateChooser.getSelectedIndex();/*
 			                    System.out.println(d);
 			                    int r = restaurantChooser.getSelectedIndex();
 			                    System.out.println(r);
@@ -385,10 +386,10 @@ public class ClientFrame extends JFrame {
 			                    int s = sectionChooser.getSelectedIndex();
 			                    System.out.println(s);
 			                    
-			                    System.out.println(dateChooser.getItemCount());
-			                    if (d>0 && d<dateChooser.getItemCount()) {
+			                    System.out.println(dateChooser.getItemCount());*/
+			                    if (d>=0 && d<dateChooser.getItemCount()) {
 			                    	dateChooser.setSelectedIndex(d);
-			                    	while (restaurantChooser.getItemCount() == 0) {}
+			                    	/*while (restaurantChooser.getItemCount() == 0) {}
 			                    	System.out.println(restaurantChooser.getItemCount());
 			                    	if (r>0 && r<restaurantChooser.getItemCount()) {
 			                    		restaurantChooser.setSelectedIndex(r);
@@ -400,8 +401,8 @@ public class ClientFrame extends JFrame {
 			    			                    sectionChooser.setSelectedIndex(s);
 			                    			}
 			                    		}
-			                    	}
-			                    }*/
+			                    	}*/
+			                    }
 		                	}
 		                }else {
 		                	if (this.resp != null){
@@ -478,7 +479,7 @@ public class ClientFrame extends JFrame {
 		        }).send();
 				
 		        
-		        /*int d = dateChooser.getSelectedIndex();
+		        int d = dateChooser.getSelectedIndex();/*
                 System.out.println(d);
                 int r = restaurantChooser.getSelectedIndex();
                 System.out.println(r);
@@ -487,10 +488,10 @@ public class ClientFrame extends JFrame {
                 int s = sectionChooser.getSelectedIndex();
                 System.out.println(s);
                 
-                System.out.println(dateChooser.getItemCount());
-                if (d>0 && d<dateChooser.getItemCount()) {
+                System.out.println(dateChooser.getItemCount());*/
+                if (d>=0 && d<dateChooser.getItemCount()) {
                 	dateChooser.setSelectedIndex(d);
-                	while (restaurantChooser.getItemCount() == 0) {}
+                	/*while (restaurantChooser.getItemCount() == 0) {}
                 	System.out.println(restaurantChooser.getItemCount());
                 	if (r>0 && r<restaurantChooser.getItemCount()) {
                 		restaurantChooser.setSelectedIndex(r);
@@ -502,8 +503,8 @@ public class ClientFrame extends JFrame {
 			                    sectionChooser.setSelectedIndex(s);
                 			}
                 		}
-                	}
-                }*/
+                	}*/
+                }
         	}
 			
 		});
