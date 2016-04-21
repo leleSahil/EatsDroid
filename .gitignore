@@ -32,3 +32,4 @@ proguard/
 captures/
 eats-server/.classpath
 eats-server/.project
+sh.exe.stackdump

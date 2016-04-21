@@ -3,12 +3,14 @@ package ServerGUI;
 import com.company.client.Client;
 import com.company.client.ResponseInterface;
 import com.company.models.Menu;
+import com.company.models.Menu.FoodItem;
 import com.company.models.Menu.Meal;
 import com.company.models.Menu.MealSections;
 import com.company.sockets.AuthenticationChecker;
 import com.company.sockets.Request;
 import com.company.sockets.Response;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import org.bson.types.ObjectId;
@@ -18,6 +20,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.util.*;
 import java.util.List;
 
@@ -69,6 +73,8 @@ public class ClientFrame extends JFrame {
 		setMinimumSize(new Dimension(640,480));
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
+		setIconImage(Toolkit.getDefaultToolkit().getImage("EatsLogo.png"));
 		
 		initializeVariables();
 		createGUI();
@@ -342,7 +348,7 @@ public class ClientFrame extends JFrame {
 				Vector<Menu.FoodItem> foods = new Vector<Menu.FoodItem>();
 				//String curr = (String)restaurantChooser.getSelectedItem();
 				for (Menu.FoodItem f : ((Menu.MealSections)sectionChooser.getSelectedItem()).section_items) {
-					foods.addElement(f);
+					foods.add(f);
 				}
 				foodChooser.setListData(foods);;
 			}
