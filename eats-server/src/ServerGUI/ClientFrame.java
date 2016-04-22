@@ -439,11 +439,11 @@ public class ClientFrame extends JFrame {
 				}
 				ObjectId menuid = ((Menu)(restaurantChooser.getSelectedItem()))._id;
 				
-				String foodIdentifier = null;
+				String foodIdentifier = new String();
 				String foodName = null;
 				
 				foodName = (String)JOptionPane.showInputDialog("Item Name:");
-				if (foodName.equals(null));
+				if (foodName == null) return;
 				
 				for (int i=0; i<foodName.length(); i++) {
 					if (foodName.charAt(i) == ' ') {
@@ -452,6 +452,7 @@ public class ClientFrame extends JFrame {
 						foodIdentifier += Character.toLowerCase(foodName.charAt(i));
 				}
 				
+				System.out.println(foodIdentifier);
 				Request request = new Request(auth, new Request.RequestMenuAdd(menuid.toString(), ((Menu.Meal)mealChooser.getSelectedItem()).meal_identifier, 
 																((Menu.MealSections)sectionChooser.getSelectedItem()).section_identifier, foodIdentifier, foodName));
 		        new Client(request, new ResponseInterface() {
