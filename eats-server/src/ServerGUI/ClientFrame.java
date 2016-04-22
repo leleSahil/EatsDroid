@@ -443,7 +443,8 @@ public class ClientFrame extends JFrame {
 				String foodName = null;
 				
 				foodName = (String)JOptionPane.showInputDialog("Item Name:");
-				if (foodName == null) return;
+				System.out.println(foodName);
+				if (foodName.equals("")) return;
 				
 				for (int i=0; i<foodName.length(); i++) {
 					if (foodName.charAt(i) == ' ') {
@@ -452,7 +453,7 @@ public class ClientFrame extends JFrame {
 						foodIdentifier += Character.toLowerCase(foodName.charAt(i));
 				}
 				
-				System.out.println(foodIdentifier);
+				System.out.println("adding food: " + foodName + "ID: " + foodIdentifier);
 				Request request = new Request(auth, new Request.RequestMenuAdd(menuid.toString(), ((Menu.Meal)mealChooser.getSelectedItem()).meal_identifier, 
 																((Menu.MealSections)sectionChooser.getSelectedItem()).section_identifier, foodIdentifier, foodName));
 		        new Client(request, new ResponseInterface() {
